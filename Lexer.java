@@ -89,9 +89,48 @@ class Lexer {
 //            case '{':addToken(Tokentype.LEFT_BRACE);break;
             case '"': string(); break;
             default:
-                Scala.error(line,"Unexpected Character");
+                if (isDigit(c)) {
+                    number();}
+                else if (isAlpha(c)) {
+                        identifier();
+                    }
+                else {
+                    Scala.error(line, "Unexpected character.");
+                }
                 break;
+
         }
+    }
+    private void identifier() {
+        while (isAlphaNumeric(peek())) advance();
+        addToken(Tokentype.IDENTIFIER);
+    }
+    private boolean isAlpha(char c) {
+        return (c >= 'a' && c <= 'z') ||
+                (c >= 'A' && c <= 'Z') ||
+                c == '_';
+    }
+    private boolean isAlphaNumeric(char c) {
+        return isAlpha(c) || isDigit(c);
+    }
+
+    private boolean isDigit(char c) {
+        return c >= '0' && c <= '9';
+    }
+    private void number() {
+        while (isDigit(peek())) advance();
+// Look for a fractional part.
+        if (peek() == '.' && isDigit(peekNext())) {
+// Consume the "."
+            advance();
+            while (isDigit(peek())) advance();
+        }
+        addToken(Tokentype.NUMBER,
+                Double.parseDouble(sources.substring(start, current)));
+    }
+    private char peekNext() {
+        if (current + 1 >= sources.length()) return '\0';
+        return sources.charAt(current + 1);
     }
     private boolean match(char expected) {
         if (isAtEnd()) return false;
@@ -131,15 +170,15 @@ class Lexer {
     private static final HashMap<String, Tokentype> keywords;
     static {
         keywords = new HashMap<>();
-//        keywords.put("and", Tokentype.AND);
+//      keywords.put("and", Tokentype.AND);
         keywords.put("class",Tokentype.CLASS);
         keywords.put("else", Tokentype.ELSE);
         keywords.put("false", Tokentype.FALSE);
         keywords.put("for", Tokentype.FOR);
-//        keywords.put("fun", FUN);
+//      keywords.put("fun", FUN);
         keywords.put("if", Tokentype.IF);
         keywords.put("nil", Tokentype.NIL);
-//        keywords.put("or", Tokentype.OR);
+//      keywords.put("or", Tokentype.OR);
         keywords.put("println", Tokentype.PRINT);
         keywords.put("return", Tokentype.RETURN);
         keywords.put("super", Tokentype.SUPER);
@@ -148,7 +187,11 @@ class Lexer {
         keywords.put("var", Tokentype.VAR);
         keywords.put("while", Tokentype.WHILE);
         keywords.put("trait",Tokentype.TRAIT);
-        keywords.put("yield",Tokentype.YIELD);
+        keywords.put("def",Tokentype.DEF);
+        keywords.put("val",Tokentype.VAL);
+        keywords.put("with",Tokentype.WITH);
+        keywords.put("object",Tokentype.OBJECT);
+
 
     }
 }
