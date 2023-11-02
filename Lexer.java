@@ -147,5 +147,8 @@ class Lexer {
         keywords.put("true", Tokentype.TRUE);
         keywords.put("var", Tokentype.VAR);
         keywords.put("while", Tokentype.WHILE);
+        keywords.put("trait",Tokentype.TRAIT);
+        keywords.put("yield",Tokentype.YIELD);
+
     }
 }
