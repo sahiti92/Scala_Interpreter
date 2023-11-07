@@ -1,5 +1,4 @@
 package Tool;
-
 import java.util.*;
 import java.io.*;
 import java.io.IOException;
@@ -11,16 +10,16 @@ System.err.println("Usage: generate_ast <output directory>");
 System.exit(64);
     String outputDir = args[0];
     defineAst(outputDir, "Expr", Arrays.asList(
-          "Binary : Expr left, Token operator, Expr right",
+          "Binary : Expr left, Crux.Token operator, Expr right",
         "Grouping : Expr expression",
         "Literal : Object value",
-        "Unary : Token operator, Expr right",
-        "Variable : Token name",
-        "Assign : Token name, Expr value",
-        "Call : Expr callee, Token paren, List<Expr> arguments",
-        "Get : Expr object, Token name",
-        "Set : Expr object, Token name, Expr value",
-        "Logical : Expr left, Token operator, Expr right",
+        "Unary : Crux.Token operator, Expr right",
+        "Variable : Crux.Token name",
+        "Assign : Crux.Token name, Expr value",
+        "Call : Expr callee, Crux.Token paren, List<Expr> arguments",
+        "Get : Expr object, Crux.Token name",
+        "Set : Expr object, Crux.Token name, Expr value",
+        "Logical : Expr left, Crux.Token operator, Expr right",
         "Conditional : Expr condition, Expr thenBranch, Expr elseBranch"
 
 ));
