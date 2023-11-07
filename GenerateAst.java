@@ -1,5 +1,5 @@
 import java.util.*;
-//commit
+//commit now
 public class GenerateAst {
     public static void main(String[] args) throws IOException {
 if (args.length != 1) {
