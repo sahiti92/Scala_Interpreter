@@ -1,10 +1,13 @@
 import java.util.*;
+import java.io.*;
+import java.io.IOException;
 //commit now now
 public class GenerateAst {
     public static void main(String[] args) throws IOException {
 if (args.length != 1) {
-stem.err.println("Usage: generate_ast <output directory>");
+System.err.println("Usage: generate_ast <output directory>");
 System.exit(64);
+    String outputDir = args[0];
     defineAst(outputDir, "Expr", Arrays.asList(
           "Binary : Expr left, Token operator, Expr right",
         "Grouping : Expr expression",
@@ -20,7 +23,7 @@ System.exit(64);
 
 ));
 }
-String outputDir = args[0];}
+}
     private static void defineAst(String outputDir, String baseName, List<String> types)
             throws IOException {
                
@@ -63,4 +66,4 @@ writer.println(" final " + field + ";");
  writer.println(" }");
  }
     }
-}
+
