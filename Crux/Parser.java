@@ -49,7 +49,7 @@ class Parser {
         }
         return false;
     }
-    private Token consume(TokenType type, String message) {
+    private Token consume(Tokentype type, String message) {
 if (check(type)) return advance();
 throw error(peek(), message);
 }
@@ -140,12 +140,14 @@ throw error(peek(), message);
     }
 
     private Expressions primary() {
-        private Expr primary() {
+
 //if (match(FALSE)) return new Expr.Literal(false);
 //if (match(TRUE)) return new Expr.Literal(true);
 //if (match(NIL)) return new Expr.Literal(null);
 //if (match(NUMBER, STRING)) {
 //return new Expr.Literal(previous().literal);}
+
+
         if (match(Tokentype.LEFT_PAREN)) {
             Expressions expressions = Expression();
             consume(Tokentype.RIGHT_PAREN, "Expect ')' after expression");
@@ -153,15 +155,15 @@ throw error(peek(), message);
         }
         throw error(peek(), "Expect expression");
     }
+//    private Token consume(Tokentype type, String message) {
+//        if (check(type)) return advance();
+//        throw error(peek(), message);
+//    }
 
-    private Token consume(Tokentype type, String message) {
-        if (check(type)) return advance();
-        throw error(peek(), message);
-    }
 
     private ParseError error(Token token, String message) {
         Scala.error(token, message); // Assuming 'lox' is a valid reference.
         return new ParseError();
-    }
+    }}
 
 
