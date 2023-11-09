@@ -65,6 +65,8 @@ class Lexer {
             case '>':
                 addToken(match('=') ? Tokentype.GREATER_EQUAL : Tokentype.GREATER);
                 break;
+            case '||': addToken(Tokentype.OR);
+                case'&&': addToken(Tokentype.AND);
             case ' ':
             case '\r':
             case '\t':
@@ -153,15 +155,15 @@ class Lexer {
     private static final HashMap<String, Tokentype> keywords;
     static {
         keywords = new HashMap<>();
-//      keywords.put("and", Tokentype.AND);
+      keywords.put("and", Tokentype.AND);
         keywords.put("class", Tokentype.CLASS);
         keywords.put("else", Tokentype.ELSE);
         keywords.put("false", Tokentype.FALSE);
         keywords.put("for", Tokentype.FOR);
-//      keywords.put("fun", FUN);
+   //  keywords.put("fun", FUN);
         keywords.put("if", Tokentype.IF);
         keywords.put("nil", Tokentype.NIL);
-//      keywords.put("or", Tokentype.OR);
+    keywords.put("or", Tokentype.OR);
         keywords.put("println", Tokentype.PRINT);
         keywords.put("return", Tokentype.RETURN);
         keywords.put("super", Tokentype.SUPER);
