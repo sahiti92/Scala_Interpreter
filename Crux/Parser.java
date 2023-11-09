@@ -79,6 +79,26 @@ throw error(peek(), message);
 //Lox.error(token, message);
 //return new ParseError();
 //}
+    //    private void synchronize() {
+//        advance();
+//        while (!isAtEnd()) {
+//            if (previous().type == Tokentype.SEMICOLON) return;
+//        }
+//        switch (peek().type) {
+//            case Tokentype.IF:
+//            case Tokentype.ELSE:
+//            case Tokentype.FOR:
+//            case Tokentype.FUN:
+//            case Tokentype.CLASS:
+//            case Tokentype.WHILE:
+//            case Tokentype.RETURN:
+//            case Tokentype.VAR:
+//            case Tokentype.PRINT:
+//                return;
+//        }
+//        advance();
+//    }
+//}
 
     private Expressions comparison() {
         Expressions expressions = term();
@@ -144,23 +164,4 @@ throw error(peek(), message);
         return new ParseError();
     }
 
-//    private void synchronize() {
-//        advance();
-//        while (!isAtEnd()) {
-//            if (previous().type == Tokentype.SEMICOLON) return;
-//        }
-//        switch (peek().type) {
-//            case Tokentype.IF:
-//            case Tokentype.ELSE:
-//            case Tokentype.FOR:
-//            case Tokentype.FUN:
-//            case Tokentype.CLASS:
-//            case Tokentype.WHILE:
-//            case Tokentype.RETURN:
-//            case Tokentype.VAR:
-//            case Tokentype.PRINT:
-//                return;
-//        }
-//        advance();
-//    }
-//}
+
