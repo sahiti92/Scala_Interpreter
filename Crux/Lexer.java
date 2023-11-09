@@ -36,6 +36,10 @@ class Lexer {
             case '-':addToken(Tokentype.MINUS);break;
             case '+':addToken(Tokentype.PLUS);break;
             case ';':addToken(Tokentype.SEMICOLON);break;
+                 case '\n':addToken(Tokentype.NEXTLINE);
+                line++;
+                break;
+                
 //            case '/':addToken(Tokentype.SLASH);break;
             case '/':
                 if (match('/')) {
@@ -66,28 +70,6 @@ class Lexer {
             case '\t':
 // Ignore whitespace.
                 break;
-            case '\n':
-                line++;
-                break;
-//            case '!=':addToken(Tokentype.LEFT_BRACE);break;
-//            case '==':addToken(Tokentype.LEFT_BRACE);break;
-//            case '>=':addToken(Tokentype.LEFT_BRACE);break;
-//            case '<=':addToken(Tokentype.LEFT_BRACE);break;
-//            case '<':addToken(Tokentype.LEFT_BRACE);break;
-//            case '>':addToken(Tokentype.LEFT_BRACE);break;
-//            case '<-':addToken(Tokentype.LEFT_BRACE);break;
-//            case '{':addToken(Tokentype.LEFT_BRACE);break;
-//            case '{':addToken(Tokentype.LEFT_BRACE);break;
-//            case '{':addToken(Tokentype.LEFT_BRACE);break;
-//            case '{':addToken(Tokentype.LEFT_BRACE);break;
-//            case '{':addToken(Tokentype.LEFT_BRACE);break;
-//            case '{':addToken(Tokentype.LEFT_BRACE);break;
-//            case '{':addToken(Tokentype.LEFT_BRACE);break;
-//            case '{':addToken(Tokentype.LEFT_BRACE);break;
-//            case '{':addToken(Tokentype.LEFT_BRACE);break;
-//            case '{':addToken(Tokentype.LEFT_BRACE);break;
-//            case '{':addToken(Tokentype.LEFT_BRACE);break;
-//            case '{':addToken(Tokentype.LEFT_BRACE);break;
             case '"': string(); break;
             default:
                 if (isDigit(c)) {
@@ -205,7 +187,5 @@ class Lexer {
         keywords.put("with", Tokentype.WITH);
         keywords.put("import", Tokentype.IMPORT);
         keywords.put("package", Tokentype.PACKAGE);
-
-
     }
 }
