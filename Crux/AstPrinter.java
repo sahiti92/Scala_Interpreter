@@ -34,12 +34,12 @@ builder.append(")");
 return builder.toString();
 }
   public static void main(String[] args) {
-Expressions expression = new Expressions().Binary(
-new Expressions().Unary(
+Expressions expression = new Expressions.Binary(
+new Expressions.Unary(
 new Token(Tokentype.MINUS, "-", null, 1),
-new Expressions().Literal(123)),
+new Expressions.Literal(123)),
 new Token(Tokentype.STAR, "*", null, 1),
-new Expressions().Grouping(
+new Expressions.Grouping(
 new Expressions.Literal(45.67)));
 System.out.println(new AstPrinter().print(expression));
 }
