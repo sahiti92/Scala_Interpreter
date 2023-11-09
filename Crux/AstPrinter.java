@@ -1,31 +1,32 @@
-package com.craftinginterpreters.lox;
-class AstPrinter implements Expr.Visitor<String> {
-String print(Expr expr) {
+
+package Crux;
+class AstPrinter implements Expressions.Visitor<String> {
+String print(Expressions expr) {
 return expr.accept(this);
 }
   @Override
-public String visitBinaryExpr(Expr.Binary expr) {
+public String visitBinaryExpr(Expressions.Binary expr) {
 return parenthesize(expr.operator.lexeme,
 expr.left, expr.right);
 }
 @Override
-public String visitGroupingExpr(Expr.Grouping expr) {
+public String visitGroupingExpr(Expressions.Grouping expr) {
 return parenthesize("group", expr.expression);
 }
-@Override
-public String visitLiteralExpr(Expr.Literal expr) {
+
+public String visitLiteralExpr(Expressions.Literal expr) {
 if (expr.value == null) return "nil";
 return expr.value.toString();
 }
 @Override
-public String visitUnaryExpr(Expr.Unary expr) {
+public String visitUnaryExpr(Expressions.Unary expr) {
 return parenthesize(expr.operator.lexeme, expr.right);
 }
 //write for remaining ones also..
-private String parenthesize(String name, Expr... exprs) {
+private String parenthesize(String name, Expressions... exprs) {
 StringBuilder builder = new StringBuilder();
 builder.append("(").append(name);
-for (Expr expr : exprs) {
+for (Expressions expr : exprs) {
 builder.append(" ");
 builder.append(expr.accept(this));
 }
@@ -33,13 +34,13 @@ builder.append(")");
 return builder.toString();
 }
   public static void main(String[] args) {
-Expr expression = new Expr.Binary(
-new Expr.Unary(
-new Token(TokenType.MINUS, "-", null, 1),
-new Expr.Literal(123)),
-new Token(TokenType.STAR, "*", null, 1),
-new Expr.Grouping(
-new Expr.Literal(45.67)));
+Expressions expression = new Expressions().Binary(
+new Expressions().Unary(
+new Token(Tokentype.MINUS, "-", null, 1),
+new Expressions().Literal(123)),
+new Token(Tokentype.STAR, "*", null, 1),
+new Expressions().Grouping(
+new Expressions.Literal(45.67)));
 System.out.println(new AstPrinter().print(expression));
 }
 }
