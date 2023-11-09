@@ -62,7 +62,7 @@ public class Scala {
         hadError = true;
     }
     static void error(Token token, String message) {
-if (token.type == TokenType.EOF) {
+if (token.type == Tokentype.EOF) {
 report(token.line, " at end", message);
 } else {
 report(token.line, " at '" + token.lexeme + "'", message);

@@ -141,11 +141,11 @@ throw error(peek(), message);
 
     private Expressions primary() {
 
-//if (match(FALSE)) return new Expr.Literal(false);
-//if (match(TRUE)) return new Expr.Literal(true);
-//if (match(NIL)) return new Expr.Literal(null);
-//if (match(NUMBER, STRING)) {
-//return new Expr.Literal(previous().literal);}
+if (match(Tokentype.FALSE)) return new Expressions.Literal(false);
+if (match(Tokentype.TRUE)) return new Expressions.Literal(true);
+if (match(Tokentype.NIL)) return new Expressions.Literal(null);
+if (match(Tokentype.NUMBER, Tokentype.STRING)) {
+return new Expressions.Literal(previous().literal);}
 
 
         if (match(Tokentype.LEFT_PAREN)) {
