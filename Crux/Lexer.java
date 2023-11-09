@@ -192,6 +192,19 @@ class Lexer {
         keywords.put("val", Tokentype.VAL);
         keywords.put("with", Tokentype.WITH);
         keywords.put("object", Tokentype.OBJECT);
+        keywords.put("do", Tokentype.DO);
+        keywords.put("match", Tokentype.MATCH);
+        keywords.put("case", Tokentype.CASE);
+        keywords.put("type", Tokentype.TYPE);
+        keywords.put("new", Tokentype.NEW);
+        keywords.put("try", Tokentype.TRY);
+        keywords.put("catch", Tokentype.CATCH);
+        keywords.put("finally", Tokentype.FINALLY);
+        keywords.put("throw", Tokentype.THROW);
+        keywords.put("extends", Tokentype.EXTENDS);
+        keywords.put("with", Tokentype.WITH);
+        keywords.put("import", Tokentype.IMPORT);
+        keywords.put("package", Tokentype.PACKAGE);
 
 
     }
