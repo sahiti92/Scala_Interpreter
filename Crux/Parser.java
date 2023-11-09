@@ -85,15 +85,19 @@ throw error(peek(), message);
             if (previous().type == Tokentype.NEXTLINE) return;
         }
         switch (peek().type) {
-            case IF:
-            case ELSE:
-            case FOR:
-            case FUN:
-            case CLASS:
-            case WHILE:
-            case RETURN:
-            case VAR:
-            case PRINT:
+              case Tokentype.IF:
+            case Tokentype.ELSE:
+            case Tokentype.FOR:
+            case Tokentype.CLASS:
+            case Tokentype.WHILE:
+            case Tokentype.RETURN:
+            case Tokentype.VAR:
+            case Tokentype.PRINT:
+            case Tokentype.AND:
+            case Tokentype.OR:
+            case Tokentype.TRAIT:
+            case Tokentype.VAL:
+            case Tokentype.CASE:
                 return;
         }
         advance();
