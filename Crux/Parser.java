@@ -49,6 +49,10 @@ class Parser {
         }
         return false;
     }
+    private Token consume(TokenType type, String message) {
+if (check(type)) return advance();
+throw error(peek(), message);
+}
 
     private boolean check(Tokentype type) {
         if (isAtEnd()) return false;
@@ -71,6 +75,10 @@ class Parser {
     private Token previous() {
         return tokens.get(current - 1);
     }
+  //  private ParseError error(Token token, String message) {
+//Lox.error(token, message);
+//return new ParseError();
+//}
 
     private Expressions comparison() {
         Expressions expressions = term();
@@ -112,6 +120,12 @@ class Parser {
     }
 
     private Expressions primary() {
+        private Expr primary() {
+//if (match(FALSE)) return new Expr.Literal(false);
+//if (match(TRUE)) return new Expr.Literal(true);
+//if (match(NIL)) return new Expr.Literal(null);
+//if (match(NUMBER, STRING)) {
+//return new Expr.Literal(previous().literal);}
         if (match(Tokentype.LEFT_PAREN)) {
             Expressions expressions = Expression();
             consume(Tokentype.RIGHT_PAREN, "Expect ')' after expression");
