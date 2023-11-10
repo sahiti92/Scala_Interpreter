@@ -6,17 +6,24 @@ class Interpreter implements Expr.Visitor<Object>{
         Object right = evaluate(expr.right);
         Object left = evaluate(expr.left);
         switch (expr.operator.type){
-            case MINUS : return (double) left - (double) right;
+            case MINUS :
+                checkNumberOperands(expr.operator, left, right);
+                return (double) left - (double) right;
            // case PLUS: return (double) left + (double) right;
-            case STAR: return (double)left * (double) right;
-            case SLASH: return (double)left / (double) right;
+            case STAR:
+                checkNumberOperands(expr.operator, left, right);
+                return (double)left * (double) right;
+            case SLASH: 
+                checkNumberOperands(expr.operator, left, right);
+                return (double)left / (double) right;
             case PLUS:
                 if (left instanceof Double && right instanceof Double) {
                     return (double)left + (double)right;
                 }
                 if (left instanceof String && right instanceof String) {
                     return (String)left + (String)right;
-                }
+                    }
+                throw new RuntimeError(expr.operator,"Operands must be two numbers or two strings.");
                 break;
                 
             case BANG_EQUAL:
@@ -59,11 +66,17 @@ class Interpreter implements Expr.Visitor<Object>{
     public Object visitUnaryExpr(Expr.Unary expr) {
         Object right = evaluate(expr.right);
         switch (expr.operator.type){
-            case MINUS : return -(double)right;
+            case MINUS :
+                checkNumberOperand1(expr.operator, right);
+                return -(double)right;
            // case BANG: return !isTruth(right);
             case BANG: return !(right);  
         }
         return null;
+    }
+    private void checkNumberOperand1(Token operator, Object operand) {
+    if (operand instanceof Double) return;
+        throw new RuntimeError(operator, "Operand must be a number.");
     }
     //in scala there is no concept of truthy or falsey values. Only Boolean type contains truth values.so updated methods accordingly.
 
@@ -85,7 +98,7 @@ class Interpreter implements Expr.Visitor<Object>{
            Object value = evaluate(expression);
            System.out.println(Stringify(value));
        }catch (RuntimeError Error){
-           lox.runtimeError(Error);
+           Scala.runtimeError(Error);
        }
 
     }
@@ -96,6 +109,8 @@ class Interpreter implements Expr.Visitor<Object>{
             String text = value.toString();
             if(text.endsWith(".0")){
                 text = text.substring(0,text.indexOf('.')-1);
+                //check diff from tb
+//text = text.substring(0, text.length() - 2);
             }
             return text;
         }
