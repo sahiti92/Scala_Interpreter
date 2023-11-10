@@ -65,8 +65,8 @@ class Lexer {
             case '>':
                 addToken(match('=') ? Tokentype.GREATER_EQUAL : Tokentype.GREATER);
                 break;
-            case '||': addToken(Tokentype.OR);
-                case'&&': addToken(Tokentype.AND);
+            case '|': if(match('|')){addToken(Tokentype.OR);}
+            case '&': if(match('&')){addToken(Tokentype.AND);}
             case ' ':
             case '\r':
             case '\t':

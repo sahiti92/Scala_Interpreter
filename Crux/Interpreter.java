@@ -1,47 +1,56 @@
-package com.craftinginterpreters.lox;
+package Crux;
 
 class Interpreter implements Expr.Visitor<Object>{
     @Override
     public Object visitBinaryExpr(Expr.Binary expr) {
         Object right = evaluate(expr.right);
         Object left = evaluate(expr.left);
-        switch (expr.operator.type){
-            case MINUS :
+        switch (expr.operator.type) {
+            case MINUS -> {
                 checkNumberOperands(expr.operator, left, right);
                 return (double) left - (double) right;
-           // case PLUS: return (double) left + (double) right;
-            case STAR:
+            }
+            // case PLUS: return (double) left + (double) right;
+            case STAR -> {
                 checkNumberOperands(expr.operator, left, right);
-                return (double)left * (double) right;
-            case SLASH: 
+                return (double) left * (double) right;
+            }
+            case SLASH -> {
                 checkNumberOperands(expr.operator, left, right);
-                return (double)left / (double) right;
-            case PLUS:
+                return (double) left / (double) right;
+            }
+            case PLUS -> {
                 if (left instanceof Double && right instanceof Double) {
-                    return (double)left + (double)right;
+                    return (double) left + (double) right;
                 }
                 if (left instanceof String && right instanceof String) {
-                    return (String)left + (String)right;
-                    }
-                throw new RuntimeError(expr.operator,"Operands must be two numbers or two strings.");
-                break;
-                
-            case BANG_EQUAL:
+                    return (String) left + (String) right;
+                } else {
+                    throw new RuntimeError(expr.operator, "Operands must be two numbers or two strings.");
+                }
+            }
+            case BANG_EQUAL -> {
                 return !isEqual(left, right);
-            case EQUAL_EQUAL:
+            }
+            case EQUAL_EQUAL -> {
                 return isEqual(left, right);
-            case GREATER:
+            }
+            case GREATER -> {
                 checkNumberOperands(expr.operator, left, right);
-                return (double)left > (double)right;
-            case GREATER_EQUAL:
+                return (double) left > (double) right;
+            }
+            case GREATER_EQUAL -> {
                 checkNumberOperands(expr.operator, left, right);
-                return (double)left >= (double)right;
-            case LESS:
+                return (double) left >= (double) right;
+            }
+            case LESS -> {
                 checkNumberOperands(expr.operator, left, right);
-                return (double)left < (double)right;
-            case LESS_EQUAL:
+                return (double) left < (double) right;
+            }
+            case LESS_EQUAL -> {
                 checkNumberOperands(expr.operator, left, right);
-                return (double)left <= (double)right;
+                return (double) left <= (double) right;
+            }
         }
         return null;
     }
@@ -70,7 +79,7 @@ class Interpreter implements Expr.Visitor<Object>{
                 checkNumberOperand1(expr.operator, right);
                 return -(double)right;
            // case BANG: return !isTruth(right);
-            case BANG: return !(right);  
+            case BANG: return !isTruth(right);
         }
         return null;
     }
@@ -80,11 +89,12 @@ class Interpreter implements Expr.Visitor<Object>{
     }
     //in scala there is no concept of truthy or falsey values. Only Boolean type contains truth values.so updated methods accordingly.
 
-  //  private boolean isTruth(Object object) {
-     //   if (object == null) return false;
-       // if(object instanceof Boolean) return (boolean) object;
-       // return true;
-   // }
+    private boolean isTruth(Object object) {
+       if (object == null) return false;
+       if(object instanceof Boolean) return (boolean) object;
+       //true /false check
+       return true;
+   }
 
     @Override
     public Object visitLiteral(Expr.Literal expr) {
