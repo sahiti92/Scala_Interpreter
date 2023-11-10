@@ -7,9 +7,18 @@ class Interpreter implements Expr.Visitor<Object>{
         Object left = evaluate(expr.left);
         switch (expr.operator.type){
             case MINUS : return (double) left - (double) right;
-            case PLUS: return (double) left + (double) right;
+           // case PLUS: return (double) left + (double) right;
             case STAR: return (double)left * (double) right;
             case SLASH: return (double)left / (double) right;
+            case PLUS:
+                if (left instanceof Double && right instanceof Double) {
+                    return (double)left + (double)right;
+                }
+                if (left instanceof String && right instanceof String) {
+                    return (String)left + (String)right;
+                }
+                break;
+                
             case BANG_EQUAL:
                 return !isEqual(left, right);
             case EQUAL_EQUAL:
@@ -51,16 +60,18 @@ class Interpreter implements Expr.Visitor<Object>{
         Object right = evaluate(expr.right);
         switch (expr.operator.type){
             case MINUS : return -(double)right;
-            case BANG: return isTruth(right);
+           // case BANG: return !isTruth(right);
+            case BANG: return !(right);  
         }
         return null;
     }
+    //in scala there is no concept of truthy or falsey values. Only Boolean type contains truth values.so updated methods accordingly.
 
-    private boolean isTruth(Object object) {
-        if (object == null) return false;
-        if(object instanceof Boolean) return (boolean) object;
-        return true;
-    }
+  //  private boolean isTruth(Object object) {
+     //   if (object == null) return false;
+       // if(object instanceof Boolean) return (boolean) object;
+       // return true;
+   // }
 
     @Override
     public Object visitLiteral(Expr.Literal expr) {
