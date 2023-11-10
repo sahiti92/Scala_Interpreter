@@ -31,16 +31,16 @@ class Lexer {
             case ')': addToken(Tokentype.RIGHT_PAREN); break;
             case '{':addToken(Tokentype.LEFT_BRACE);break;
             case '}':addToken(Tokentype.RIGHT_BRACE);break;
+            case ':':addToken(Tokentype.COLON);break;
+            case ';':addToken(Tokentype.SEMICOLON);break;
             case ',':addToken(Tokentype.COMMA);break;
             case '.':addToken(Tokentype.DOT);break;
             case '-':addToken(Tokentype.MINUS);break;
             case '+':addToken(Tokentype.PLUS);break;
-
-                 case '\n':addToken(Tokentype.NEXTLINE);
+            case '\n':addToken(Tokentype.NEXTLINE);
                 line++;
                 break;
-                
-//            case '/':addToken(Tokentype.SLASH);break;
+
             case '/':
                 if (match('/')) {
 // A comment goes until the end of the line.
@@ -88,7 +88,11 @@ class Lexer {
     }
     private void identifier() {
         while (isAlphaNumeric(peek())) advance();
-        addToken(Tokentype.IDENTIFIER);
+        String text = sources.substring(start, current);
+        Tokentype type = keywords.get(text);
+        if (type == null) type = Tokentype.IDENTIFIER;
+        addToken(type);
+
     }
     private boolean isAlpha(char c) {
         return (c >= 'a' && c <= 'z') ||
@@ -110,7 +114,7 @@ class Lexer {
             advance();
             while (isDigit(peek())) advance();
         }
-        addToken(Tokentype.NUMBER,
+        addToken(Tokentype.DOUBLE,
                 Double.parseDouble(sources.substring(start, current)));
     }
     private char peekNext() {
@@ -155,7 +159,6 @@ class Lexer {
     private static final HashMap<String, Tokentype> keywords;
     static {
         keywords = new HashMap<>();
-      keywords.put("and", Tokentype.AND);
         keywords.put("class", Tokentype.CLASS);
         keywords.put("else", Tokentype.ELSE);
         keywords.put("false", Tokentype.FALSE);
@@ -163,7 +166,11 @@ class Lexer {
    //  keywords.put("fun", FUN);
         keywords.put("if", Tokentype.IF);
         keywords.put("nil", Tokentype.NIL);
-    keywords.put("or", Tokentype.OR);
+        keywords.put("Int", Tokentype.INT);
+        keywords.put("Double", Tokentype.DOUBLE);
+        keywords.put("String",Tokentype.STRING);
+        keywords.put("Float", Tokentype.FLOAT);
+        keywords.put("yield", Tokentype.YIELD);
         keywords.put("println", Tokentype.PRINT);
         keywords.put("return", Tokentype.RETURN);
         keywords.put("super", Tokentype.SUPER);
@@ -174,7 +181,6 @@ class Lexer {
         keywords.put("trait", Tokentype.TRAIT);
         keywords.put("def", Tokentype.DEF);
         keywords.put("val", Tokentype.VAL);
-        keywords.put("with", Tokentype.WITH);
         keywords.put("object", Tokentype.OBJECT);
         keywords.put("do", Tokentype.DO);
         keywords.put("match", Tokentype.MATCH);
