@@ -18,11 +18,11 @@ class Parser {
         this.tokens = tokens;
     }
 
-    private Expressions Expression() {
+    private Expr Expression() {
         return equality();
     }
 
-    Expressions parse() {
+    Expr parse() {
         try {
             return Expression();
         } catch (ParseError error) {
@@ -30,12 +30,12 @@ class Parser {
         }
     }
 
-    private Expressions equality() {
-        Expressions expressions = comparison();
+    private Expr equality() {
+        Expr expressions = comparison();
         while (match(Tokentype.BANG_EQUAL, Tokentype.EQUAL_EQUAL)) {
             Token operator = previous();
-            Expressions right = comparison();
-            expressions = new Expressions.Binary(expressions, operator, right);
+            Expr right = comparison();
+            expressions = new Expr.Binary(expressions, operator, right);
         }
         return expressions;
     }
@@ -85,77 +85,77 @@ throw error(peek(), message);
             if (previous().type == Tokentype.NEXTLINE) return;
         }
         switch (peek().type) {
-              case Tokentype.IF:
-            case Tokentype.ELSE:
-            case Tokentype.FOR:
-            case Tokentype.CLASS:
-            case Tokentype.WHILE:
-            case Tokentype.RETURN:
-            case Tokentype.VAR:
-            case Tokentype.PRINT:
-            case Tokentype.AND:
-            case Tokentype.OR:
-            case Tokentype.TRAIT:
-            case Tokentype.VAL:
-            case Tokentype.CASE:
+              case IF:
+            case ELSE:
+            case FOR:
+            case CLASS:
+            case WHILE:
+            case RETURN:
+            case VAR:
+            case PRINT:
+            case AND:
+            case OR:
+            case TRAIT:
+            case VAL:
+            case CASE:
                 return;
         }
         advance();
     }
 //}
 
-    private Expressions comparison() {
-        Expressions expressions = term();
+    private Expr comparison() {
+        Expr expressions = term();
         while (match(Tokentype.GREATER, Tokentype.GREATER_EQUAL, Tokentype.LESS, Tokentype.LESS_EQUAL)) {
             Token operator = previous();
-            Expressions right = factor();
-            expressions = new Expressions.Binary(expressions, operator, right);
+            Expr right = factor();
+            expressions = new Expr.Binary(expressions, operator, right);
         }
         return expressions;
     }
 
-    private Expressions term() {
-        Expressions expressions = factor();
+    private Expr term() {
+        Expr expressions = factor();
         while (match(Tokentype.MINUS, Tokentype.PLUS)) {
             Token operator = previous();
-            Expressions right = factor();
-            expressions = new Expressions.Binary(expressions, operator, right);
+            Expr right = factor();
+            expressions = new Expr.Binary(expressions, operator, right);
         }
         return expressions;
     }
 
-    private Expressions factor() {
-        Expressions expressions = unary();
+    private Expr factor() {
+        Expr expressions = unary();
         while (match(Tokentype.SLASH, Tokentype.STAR)) {
             Token operator = previous();
-            Expressions right = unary();
-            expressions = new Expressions.Binary(expressions, operator, right);
+            Expr right = unary();
+            expressions = new Expr.Binary(expressions, operator, right);
         }
         return expressions;
     }
 
-    private Expressions unary() {
+    private Expr unary() {
         if (match(Tokentype.BANG, Tokentype.MINUS)) {
             Token operator = previous();
-            Expressions right = unary();
-            return new Expressions.Unary(operator, right);
+            Expr right = unary();
+            return new Expr.Unary(operator, right);
         }
         return primary();
     }
 
-    private Expressions primary() {
+    private Expr primary() {
 
-if (match(Tokentype.FALSE)) return new Expressions.Literal(false);
-if (match(Tokentype.TRUE)) return new Expressions.Literal(true);
-if (match(Tokentype.NIL)) return new Expressions.Literal(null);
+if (match(Tokentype.FALSE)) return new Expr.Literal(false);
+if (match(Tokentype.TRUE)) return new Expr.Literal(true);
+if (match(Tokentype.NIL)) return new Expr.Literal(null);
 if (match(Tokentype.NUMBER, Tokentype.STRING)) {
-return new Expressions.Literal(previous().literal);}
+return new Expr.Literal(previous().literal);}
 
 
         if (match(Tokentype.LEFT_PAREN)) {
-            Expressions expressions = Expression();
+            Expr expressions = Expression();
             consume(Tokentype.RIGHT_PAREN, "Expect ')' after expression");
-            return new Expressions.Grouping(expressions);
+            return new Expr.Grouping(expressions);
         }
         throw error(peek(), "Expect expression");
     }
