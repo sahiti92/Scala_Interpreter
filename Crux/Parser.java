@@ -5,9 +5,6 @@ import java.util.List;
 // You should remove this line because the package name should match the folder structure.
 // package Interpreter_Scala.Crux;
 
-import java.sql.Statement;
-import java.util.List;
-import java.util.ArrayList;
 
 class Parser {
     private static class ParseError extends RuntimeException {};
@@ -148,7 +145,7 @@ throw error(peek(), message);
 if (match(Tokentype.FALSE)) return new Expressions.Literal(false);
 if (match(Tokentype.TRUE)) return new Expressions.Literal(true);
 if (match(Tokentype.NIL)) return new Expressions.Literal(null);
-if (match(Tokentype.NUMBER, Tokentype.STRING)) {
+if (match(Tokentype.DOUBLE, Tokentype.STRING)) {
 return new Expressions.Literal(previous().literal);}
 
 

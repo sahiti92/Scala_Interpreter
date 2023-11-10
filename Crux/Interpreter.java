@@ -85,7 +85,7 @@ class Interpreter implements Expr.Visitor<Object>{
     }
     private void checkNumberOperand1(Token operator, Object operand) {
     if (operand instanceof Double) return;
-        throw new RuntimeError(operator, "Operand must be a number.");
+    throw new RuntimeError(operator, "Operand must be a number.");
     }
     //in scala there is no concept of truthy or falsey values. Only Boolean type contains truth values.so updated methods accordingly.
 
