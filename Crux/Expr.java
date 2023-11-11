@@ -24,10 +24,9 @@ abstract class Expr {
         final Expr left;
         final Token operator;
         final Expr right;
-
         @Override
         <R> R accept(Visitor<R> visitor) {
-            return null;
+            return visitor.visitBinaryExpr(this);
         }
     }
     static class Unary extends Expr{
@@ -40,7 +39,7 @@ abstract class Expr {
 
         @Override
         <R> R accept(Visitor<R> visitor) {
-            return null;
+            return visitor.visitUnaryExpr(this);
         }
     }
     static class Grouping extends Expr{
@@ -51,7 +50,7 @@ abstract class Expr {
 
         @Override
         <R> R accept(Visitor<R> visitor) {
-            return null;
+            return visitor.visitGroupingExpr(this);
         }
     }
     static class Literal extends Expr{

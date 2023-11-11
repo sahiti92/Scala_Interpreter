@@ -70,7 +70,7 @@ throw error(peek(), message);
     }
 
     private Token previous() {
-        return tokens.get(current - 1);
+        return  tokens.get(current - 1);
     }
   //  private ParseError error(Token token, String message) {
 //Lox.error(token, message);
@@ -146,8 +146,8 @@ throw error(peek(), message);
 if (match(Tokentype.FALSE)) return new Expr.Literal(false);
 if (match(Tokentype.TRUE)) return new Expr.Literal(true);
 if (match(Tokentype.NIL)) return new Expr.Literal(null);
-if (match(Tokentype.DOUBLE, Tokentype.STRING)) {
-return new Expr.Literal(previous().literal);}
+if (match(Tokentype.DOUBLE, Tokentype.IDENTIFIER)) {
+ return new Expr.Literal(previous().literal);}
 
 
         if (match(Tokentype.LEFT_PAREN)) {

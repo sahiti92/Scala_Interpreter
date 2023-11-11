@@ -43,22 +43,24 @@ public class Scala {
         }
     }
     private static void run(String source){
-        Lexer scanner = new Lexer(source);
+       Lexer scanner = new Lexer(source);
+//        List<Token> tokens = scanner.scanTokens();
+//
         List<Token> tokens = scanner.scanTokens();
-
         for(Token token : tokens){
             System.out.println(token);
         }
-      //  List<Token> tokens = scanner.scanTokens();
-//Parser parser = new Parser(tokens);
-//Expr expression = parser.parse();
-// Stop if there was a syntax error.
-//if (hadError) return;
-//System.out.println(new AstPrinter().print(expression));
-//}
+
+Parser parser = new Parser(tokens);
+Expr expression = parser.parse();
+//        System.out.println(expression);
+ //Stop if there was a syntax error.
+if (hadError) return;
+System.out.println(new AstPrinter().print(expression));
+
         // Next-if (hadError) return;
-//interpreter.interpret(expression);
-    }
+interpreter.interpret(expression);}
+
     static void error(int line, String message){
         report(line,"",message);
     }
