@@ -16,6 +16,7 @@ class AstPrinter implements Expr.Visitor<String> {
     builder.append("(").append(name);
     for(Expr expr : exprs){
       builder.append(" ");
+
       builder.append(expr.accept(this));
     }
     builder.append(")");
@@ -25,7 +26,7 @@ class AstPrinter implements Expr.Visitor<String> {
 
   @Override
   public String visitGroupingExpr(Expr.Grouping expr) {
-    return parenthesize("group",expr.expr);
+    return parenthesize("group",expr.expression);
   }
 
   @Override
@@ -34,7 +35,7 @@ class AstPrinter implements Expr.Visitor<String> {
   }
 
   @Override
-  public String visitLiteral(Expr.Literal expr) {
+  public String visitLiteralExpr(Expr.Literal expr) {
     if(expr.value==null)return "ss";
     return  expr.value.toString();
   }

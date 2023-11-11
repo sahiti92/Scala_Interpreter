@@ -1,7 +1,9 @@
 package Crux;
 
 import java.util.List;
+import java.util.ArrayList;
 
+import static Crux.Tokentype.VAR;
 // You should remove this line because the package name should match the folder structure.
 // package Interpreter_Scala.Crux;
 
@@ -18,15 +20,59 @@ class Parser {
     private Expr Expression() {
         return equality();
     }
-
-    Expr parse() {
+    private Stmt declaration() {
         try {
-            return Expression();
+            if (match(Tokentype.VAR)) return varDeclaration();
+            return statement();
         } catch (ParseError error) {
+            synchronize();
             return null;
         }
     }
-
+    private Stmt statement() {
+        if (match(Tokentype.PRINT)) return printStatement();
+        return expressionStatement();
+    }
+    private Stmt printStatement() {
+        Expr value = Expression();
+        consume(Tokentype.NEXTLINE, "Expect '\n' after value.");
+        return new Stmt.Print(value);
+    }
+    private Stmt varDeclaration() {
+        Token name = consume(Tokentype.IDENTIFIER, "Expect variable name.");
+        Expr initializer = null;
+        if (match(Tokentype.EQUAL)) {
+            initializer = Expression();
+        }
+        consume(Tokentype.NEXTLINE, "Expect '\n' after variable declaration.");
+        return new Stmt.Var(name, initializer);
+    }
+    private Stmt expressionStatement() {
+        Expr expr =   Expression();
+        consume(Tokentype.NEXTLINE, "Expect '\n' after expression.");
+        return new Stmt.Expression(expr);
+    }
+    //    Expr parse() {
+//        try {
+//            return Expression();
+//        } catch (ParseError error) {
+//            return null;
+//        }
+//    }
+//    List<Stmt> parse() {
+//        List<Stmt> statements = new ArrayList<>();
+//        while (!isAtEnd()) {
+//            statements.add(statement());
+//        }
+//        return statements;
+//    }
+    List<Stmt> parse() {
+        List<Stmt> statements = new ArrayList<>();
+        while (!isAtEnd()) {
+            statements.add(declaration());
+        }
+        return statements;
+    }
     private Expr equality() {
         Expr expressions = comparison();
         while (match(Tokentype.BANG_EQUAL, Tokentype.EQUAL_EQUAL)) {
@@ -47,9 +93,9 @@ class Parser {
         return false;
     }
     private Token consume(Tokentype type, String message) {
-if (check(type)) return advance();
-throw error(peek(), message);
-}
+        if (check(type)) return advance();
+        throw error(peek(), message);
+    }
 
     private boolean check(Tokentype type) {
         if (isAtEnd()) return false;
@@ -72,11 +118,11 @@ throw error(peek(), message);
     private Token previous() {
         return  tokens.get(current - 1);
     }
-  //  private ParseError error(Token token, String message) {
+    //  private ParseError error(Token token, String message) {
 //Lox.error(token, message);
 //return new ParseError();
 //}
-        private void synchronize() {
+    private void synchronize() {
         advance();
         while (!isAtEnd()) {
             if (previous().type == Tokentype.NEXTLINE) return;
@@ -143,11 +189,14 @@ throw error(peek(), message);
 
     private Expr primary() {
 
-if (match(Tokentype.FALSE)) return new Expr.Literal(false);
-if (match(Tokentype.TRUE)) return new Expr.Literal(true);
-if (match(Tokentype.NIL)) return new Expr.Literal(null);
-if (match(Tokentype.DOUBLE, Tokentype.IDENTIFIER)) {
- return new Expr.Literal(previous().literal);}
+        if (match(Tokentype.FALSE)) return new Expr.Literal(false);
+        if (match(Tokentype.TRUE)) return new Expr.Literal(true);
+        if (match(Tokentype.NIL)) return new Expr.Literal(null);
+        if (match(Tokentype.DOUBLE, Tokentype.IDENTIFIER,Tokentype.INT)) {
+            return new Expr.Literal(previous().literal);}
+        if (match(Tokentype.IDENTIFIER)) {
+            return new Expr.Variable(previous());
+        }
 
 
         if (match(Tokentype.LEFT_PAREN)) {

@@ -113,8 +113,13 @@ class Lexer {
 // Consume the "."
             advance();
             while (isDigit(peek())) advance();
+            addToken(Tokentype.DOUBLE,Double.parseDouble(sources.substring(start, current)));
         }
-        addToken(Tokentype.DOUBLE,Double.parseDouble(sources.substring(start, current)));
+        else
+        {
+            addToken(Tokentype.INT,Integer.parseInt(sources.substring(start,current)));
+        }
+
     }
     private char peekNext() {
         if (current + 1 >= sources.length()) return '\0';
