@@ -1,3 +1,5 @@
+package Crux;
+
 import java.util.Map;
 import java.util.HashMap;
 public class Environment {
@@ -10,6 +12,9 @@ public class Environment {
         if (enclosing != null) return enclosing.get(name);
         throw new RuntimeError(name,
                 "Undefined variable '" + name.lexeme + "'.");
+    }
+    void define(String name, Object value) {
+        values.put(name, value);
     }
      Environment(){
          enclosing =null;

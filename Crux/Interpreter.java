@@ -199,6 +199,23 @@ import java.util.List;
     private void execute(Stmt stmt) {
         stmt.accept(this);
     }
+    void executeBlock(List<Stmt> statements,
+                      Environment environment) {
+        Environment previous = this.environment;
+        try {
+            this.environment = environment;
+            for (Stmt statement : statements) {
+                execute(statement);
+            }
+        } finally {
+            this.environment = previous;
+        }
+    }
+    @Override
+    public Void visitBlockStmt(Stmt.Block stmt) {
+        executeBlock(stmt.statements, new Environment(environment));
+        return null;
+    }
     @Override
     public Void visitExpressionStmt(Stmt.Expression stmt) {
         evaluate(stmt.expression);
@@ -218,6 +235,12 @@ import java.util.List;
         }
         environment.define(stmt.name.lexeme, value);
         return null;
+    }
+    @Override
+    public Object visitAssignExpr(Expr.Assign expr) {
+        Object value = evaluate(expr.value);
+        environment.assign(expr.name, value);
+        return value;
     }
     @Override
     public Object visitVariableExpr(Expr.Variable expr) {

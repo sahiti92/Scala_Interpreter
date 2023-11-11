@@ -16,17 +16,18 @@ public class GenerateAst {
             "Grouping : Expr expression",
             "Literal : Object value",
             "Unary : Crux.Token operator, Expr right",
-            "Variable : Crux.Token name"));
-//        "Assign : Crux.Token name, Expr value",
+            "Variable : Crux.Token name",
+         "Assign : Crux.Token name, Expr value"
 //        "Call : Expr callee, Crux.Token paren, List<Expr> arguments",
 //        "Get : Expr object, Crux.Token name",
 //        "Set : Expr object, Crux.Token name, Expr value",
 //        "Logical : Expr left, Crux.Token operator, Expr right",
 //        "Conditional : Expr condition, Expr thenBranch, Expr elseBranch"
 
-//));
+));
 defineAst(outputDir, "Stmt", Arrays.asList(
-                "Expression : Expr expression",
+        "Block : List<Stmt> statements",
+        "Expression : Expr expression",
         "Print : Expr expression",
         "Var : Token name, Expr initializer"
         ));

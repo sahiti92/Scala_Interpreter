@@ -18,7 +18,8 @@ class Parser {
     }
 
     private Expr Expression() {
-        return equality();
+        //return equality();
+       return assignment();
     }
     private Stmt declaration() {
         try {
@@ -31,11 +32,12 @@ class Parser {
     }
     private Stmt statement() {
         if (match(Tokentype.PRINT)) return printStatement();
+        if (match(Tokentype.LEFT_BRACE)) return new Stmt.Block(block());
         return expressionStatement();
     }
     private Stmt printStatement() {
         Expr value = Expression();
-        consume(Tokentype.NEXTLINE, "Expect '\n' after value.");
+        consume(Tokentype.SEMICOLON, "Expect ';' after value.");
         return new Stmt.Print(value);
     }
     private Stmt varDeclaration() {
@@ -44,14 +46,36 @@ class Parser {
         if (match(Tokentype.EQUAL)) {
             initializer = Expression();
         }
-        consume(Tokentype.NEXTLINE, "Expect '\n' after variable declaration.");
+        consume(Tokentype.SEMICOLON, "Expect ';' after variable declaration.");
         return new Stmt.Var(name, initializer);
     }
     private Stmt expressionStatement() {
         Expr expr =   Expression();
-        consume(Tokentype.NEXTLINE, "Expect '\n' after expression.");
+        consume(Tokentype.SEMICOLON, "Expect ';' after expression.");
         return new Stmt.Expression(expr);
     }
+    private List<Stmt> block() {
+        List<Stmt> statements = new ArrayList<>();
+        while (!check(Tokentype.RIGHT_BRACE) && !isAtEnd()) {
+            statements.add(declaration());
+        }
+        consume(Tokentype.RIGHT_BRACE, "Expect '}' after block.");
+        return statements;
+    }
+    private Expr assignment() {
+        Expr expr = equality();
+        if (match(Tokentype.EQUAL)) {
+            Token equals = previous();
+            Expr value = assignment();
+            if (expr instanceof Expr.Variable) {
+                Token name = ((Expr.Variable) expr).name;
+                return new Expr.Assign(name, value);
+            }
+            error(equals, "Invalid assignment target.");
+        }
+            return expr;
+        }
+
     //    Expr parse() {
 //        try {
 //            return Expression();
