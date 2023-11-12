@@ -53,7 +53,7 @@ class Parser {
 
 
 
-
+//delimiter as nextline shld be fig out
     private Stmt varDeclaration() {
         Token nameToken = consume(Tokentype.IDENTIFIER, "Expect variable name.");
         Optional<String> varType = Optional.empty();
