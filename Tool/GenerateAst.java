@@ -10,8 +10,9 @@ public class GenerateAst {
        // System.err.println("Usage: generate_ast <output directory>");
        // System.exit(64);
     //}
-    String outputDir = "C:\\Users\\ikshitha j\\Interpreter_Scala\\Crux";
-    defineAst(outputDir, "Expr", Arrays.asList(
+        String outputDir = "C:\\Users\\ikshitha j\\Interpreter_Scala\\Crux";
+//    String outputDir = "C:\\Users\\DHANANJAY V\\IdeaProjects\\Interpreter_Scala\\Crux";
+   defineAst(outputDir, "Expr", Arrays.asList(
             "Binary : Expr left, Crux.Token operator, Expr right",
             "Grouping : Expr expression",
             "Literal : Object value",
@@ -28,6 +29,7 @@ public class GenerateAst {
 defineAst(outputDir, "Stmt", Arrays.asList(
         "Block : List<Stmt> statements",
         "Expression : Expr expression",
+      //  "If : Expr condition, Stmt thenBranch," + " Stmt elseBranch",
         "Print : Expr expression",
         "Var : Token name, Expr initializer"
         ));

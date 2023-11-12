@@ -5,12 +5,9 @@ import java.util.List;
 
         private Environment environment = new Environment();
 
-
-
-    //    Object a;
-//    Object b;
     @Override
     public Object visitBinaryExpr(Expr.Binary expr) {
+
 
         Object right = evaluate(expr.right);
         Object left = evaluate(expr.left);
@@ -41,7 +38,8 @@ import java.util.List;
                 }
                 return ((Number) left).doubleValue() / ((Number) right).doubleValue();
             }
-            case PLUS -> {
+            case PLUS -> {//when 2 var passed
+
                 if (left instanceof Double && right instanceof Double) {
                     return (double) left + (double) right;
                 }
@@ -221,6 +219,15 @@ import java.util.List;
         evaluate(stmt.expression);
         return null;
     }
+//    @Override
+//    public Void visitIfStmt(Stmt.If stmt) {
+//        if (isTruth(evaluate(stmt.condition))) {
+//            execute(stmt.thenBranch);
+//        } else if (stmt.elseBranch != null) {
+//            execute(stmt.elseBranch);
+//        }
+//        return null;
+//    }
     @Override
     public Void visitPrintStmt(Stmt.Print stmt) {
         Object value = evaluate(stmt.expression);

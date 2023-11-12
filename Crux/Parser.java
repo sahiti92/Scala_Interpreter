@@ -32,10 +32,24 @@ class Parser {
         }
     }
     private Stmt statement() {
+
+//        if (match(Tokentype.IF)) return ifStatement();
         if (match(Tokentype.PRINT)) return printStatement();
         if (match(Tokentype.LEFT_BRACE)) return new Stmt.Block(block());
         return expressionStatement();
     }
+
+//    private Stmt ifStatement() {
+//        consume(Tokentype.LEFT_PAREN, "Expect '(' after 'if'.");
+//        Expr condition = Expression();
+//        consume(Tokentype.RIGHT_PAREN, "Expect ')' after if condition.");
+//        Stmt thenBranch = statement();
+//        Stmt elseBranch = null;
+//        if (match(Tokentype.ELSE)) {
+//            elseBranch = statement();
+//        }
+//        return new Stmt.If(condition, thenBranch, elseBranch);
+//    }
     private Stmt printStatement() {
         Expr value = Expression();
         consume(Tokentype.SEMICOLON, "Expect ';' after value.");
@@ -83,7 +97,7 @@ class Parser {
         consume(Tokentype.SEMICOLON, "Expect ';' after variable declaration.");
 
         // Return an instance of Stmt directly
-        return new Stmt.Var(nameToken, varType, initializer);
+        return new Stmt.Var(nameToken, initializer);//removed vartype here.check again the method
     }
     private Stmt expressionStatement() {
         Expr expr =   Expression();
