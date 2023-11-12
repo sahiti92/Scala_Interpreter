@@ -234,6 +234,7 @@ import java.util.List;
             value = evaluate(stmt.initializer);
         }
         environment.define(stmt.name.lexeme, value);
+        System.out.println(value.toString());
         return null;
     }
     @Override

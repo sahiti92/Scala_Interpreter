@@ -60,7 +60,19 @@ class Parser {
 
         if (match(Tokentype.COLON)) {
             // Assuming Tokentype.COLON is used for specifying the type
-            varType = Optional.of(consume(Tokentype.INT, "Expect variable type.").lexeme);
+
+            Token datatype=getcurrent();
+            switch (datatype.type){
+                case INT:
+                    varType = Optional.of(consume(Tokentype.INT, "Expect variable type.").lexeme);break;
+                case DOUBLE:
+                    varType = Optional.of(consume(Tokentype.DOUBLE, "Expect variable type.").lexeme);break;
+                case FLOAT:
+                    varType = Optional.of(consume(Tokentype.FLOAT, "Expect variable type.").lexeme);break;
+                case STRING:
+                    varType = Optional.of(consume(Tokentype.STRING, "Expect variable type.").lexeme);break;
+            }
+            //varType = Optional.of(consume(Tokentype.INT, "Expect variable type.").lexeme);
         }
 
         Expr initializer = null;
@@ -162,7 +174,10 @@ class Parser {
         if (!isAtEnd()) current++;
         return previous();
     }
-
+   private Token getcurrent(){
+       if (!isAtEnd()) return tokens.get(current);
+       return null;
+   }
     private Token previous() {
         return  tokens.get(current - 1);
     }
