@@ -56,7 +56,7 @@ public class Scala {
 //System.out.println(new AstPrinter().print(expression));
 //interpreter.interpret(expression);
 
-        List<Stmt> statements = parser.parse();
+       List<Stmt> statements = parser.parse();
 
 // Stop if there was a syntax error.
         if (hadError) return;
@@ -67,7 +67,7 @@ public class Scala {
     static void error(int line, String message){
         report(line,"",message);
     }
-    
+
     private static void report(int line, String where, String message){
         System.err.println("[line "+line+"] Error"+where+": "+message);
         hadError = true;
@@ -83,7 +83,7 @@ report(token.line, " at '" + token.lexeme + "'", message);
     System.err.println(error.getMessage() +"\n[line " + error.token.line + "]");
     hadRuntimeError = true;
     }
-    
+
 }
 
 //runtime error and interpreter are left

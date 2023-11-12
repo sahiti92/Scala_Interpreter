@@ -2,6 +2,7 @@ package Crux;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Optional;
 
 import static Crux.Tokentype.VAR;
 // You should remove this line because the package name should match the folder structure.
@@ -40,14 +41,37 @@ class Parser {
         consume(Tokentype.SEMICOLON, "Expect ';' after value.");
         return new Stmt.Print(value);
     }
+//    private Stmt varDeclaration() {
+//        Token name = consume(Tokentype.IDENTIFIER, "Expect variable name.");
+//        Expr initializer = null;
+//        if (match(Tokentype.EQUAL)) {
+//            initializer = Expression();
+//        }
+//        consume(Tokentype.SEMICOLON, "Expect ';' after variable declaration.");
+//        return new Stmt.Var(name, initializer);
+//    }
+
+
+
+
     private Stmt varDeclaration() {
-        Token name = consume(Tokentype.IDENTIFIER, "Expect variable name.");
+        Token nameToken = consume(Tokentype.IDENTIFIER, "Expect variable name.");
+        Optional<String> varType = Optional.empty();
+
+        if (match(Tokentype.COLON)) {
+            // Assuming Tokentype.COLON is used for specifying the type
+            varType = Optional.of(consume(Tokentype.INT, "Expect variable type.").lexeme);
+        }
+
         Expr initializer = null;
         if (match(Tokentype.EQUAL)) {
             initializer = Expression();
         }
+
         consume(Tokentype.SEMICOLON, "Expect ';' after variable declaration.");
-        return new Stmt.Var(name, initializer);
+
+        // Return an instance of Stmt directly
+        return new Stmt.Var(nameToken, varType, initializer);
     }
     private Stmt expressionStatement() {
         Expr expr =   Expression();
