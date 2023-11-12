@@ -49,4 +49,9 @@ class AstPrinter implements Expr.Visitor<String> {
     if(expr.value==null)return "ss";
     return  expr.value.toString();
   }
+
+  @Override
+  public String visitLogicalExpr(Expr.Logical expr) {
+    return null;
+  }
 }

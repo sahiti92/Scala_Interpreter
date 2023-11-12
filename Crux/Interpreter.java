@@ -191,6 +191,16 @@ import java.util.List;
     public Object visitLiteralExpr(Expr.Literal expr) {
         return expr.value;
     }
+    @Override
+    public Object visitLogicalExpr(Expr.Logical expr) {
+        Object left = evaluate(expr.left);
+        if (expr.operator.type == Tokentype.OR) {
+            if (isTruth(left)) return left;
+        } else {
+            if (!isTruth(left)) return left;
+        }
+        return evaluate(expr.right);
+    }
     private Object evaluate(Expr expr){
         return expr.accept(this);
     }
@@ -219,15 +229,15 @@ import java.util.List;
         evaluate(stmt.expression);
         return null;
     }
-//    @Override
-//    public Void visitIfStmt(Stmt.If stmt) {
-//        if (isTruth(evaluate(stmt.condition))) {
-//            execute(stmt.thenBranch);
-//        } else if (stmt.elseBranch != null) {
-//            execute(stmt.elseBranch);
-//        }
-//        return null;
-//    }
+    @Override
+    public Void visitIfStmt(Stmt.If stmt) {
+        if (isTruth(evaluate(stmt.condition))) {
+            execute(stmt.thenBranch);
+        } else if (stmt.elseBranch != null) {
+            execute(stmt.elseBranch);
+        }
+        return null;
+    }
     @Override
     public Void visitPrintStmt(Stmt.Print stmt) {
         Object value = evaluate(stmt.expression);
@@ -242,6 +252,13 @@ import java.util.List;
         }
         environment.define(stmt.name.lexeme, value);
         System.out.println(value.toString());
+        return null;
+    }
+    @Override
+    public Void visitWhileStmt(Stmt.While stmt) {
+        while (isTruth(evaluate(stmt.condition))) {
+            execute(stmt.body);
+        }
         return null;
     }
     @Override

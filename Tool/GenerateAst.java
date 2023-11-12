@@ -10,28 +10,30 @@ public class GenerateAst {
        // System.err.println("Usage: generate_ast <output directory>");
        // System.exit(64);
     //}
-        String outputDir = "C:\\Users\\ikshitha j\\Interpreter_Scala\\Crux";
-//    String outputDir = "C:\\Users\\DHANANJAY V\\IdeaProjects\\Interpreter_Scala\\Crux";
+       // String outputDir = "C:\\Users\\ikshitha j\\Interpreter_Scala\\Crux";
+    String outputDir = "C:\\Users\\DHANANJAY V\\IdeaProjects\\Interpreter_Scala\\Crux";
    defineAst(outputDir, "Expr", Arrays.asList(
             "Binary : Expr left, Crux.Token operator, Expr right",
             "Grouping : Expr expression",
             "Literal : Object value",
+           "Logical : Expr left, Crux.Token operator, Expr right",
             "Unary : Crux.Token operator, Expr right",
             "Variable : Crux.Token name",
          "Assign : Crux.Token name, Expr value"
 //        "Call : Expr callee, Crux.Token paren, List<Expr> arguments",
 //        "Get : Expr object, Crux.Token name",
 //        "Set : Expr object, Crux.Token name, Expr value",
-//        "Logical : Expr left, Crux.Token operator, Expr right",
-//        "Conditional : Expr condition, Expr thenBranch, Expr elseBranch"
+
 
 ));
 defineAst(outputDir, "Stmt", Arrays.asList(
         "Block : List<Stmt> statements",
         "Expression : Expr expression",
-      //  "If : Expr condition, Stmt thenBranch," + " Stmt elseBranch",
+        "If : Expr condition, Stmt thenBranch," + " Stmt elseBranch",
+        //        "Conditional : Expr condition, Expr thenBranch, Expr elseBranch"/earlier gpt
         "Print : Expr expression",
-        "Var : Token name, Expr initializer"
+        "Var : Token name, Expr initializer",//need to change..not so sure
+        "While : Expr condition, Stmt body"
         ));
     }
 

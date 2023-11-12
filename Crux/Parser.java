@@ -1,9 +1,11 @@
 package Crux;
 
 import java.util.List;
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Optional;
 
+import static Crux.Tokentype.RIGHT_PAREN;
 import static Crux.Tokentype.VAR;
 // You should remove this line because the package name should match the folder structure.
 // package Interpreter_Scala.Crux;
@@ -35,6 +37,7 @@ class Parser {
 
 //        if (match(Tokentype.IF)) return ifStatement();
         if (match(Tokentype.PRINT)) return printStatement();
+        if (match(Tokentype.WHILE)) return whileStatement();
         if (match(Tokentype.LEFT_BRACE)) return new Stmt.Block(block());
         return expressionStatement();
     }
@@ -89,6 +92,18 @@ class Parser {
             //varType = Optional.of(consume(Tokentype.INT, "Expect variable type.").lexeme);
         }
 
+//        Expr expr = equality();
+//        if (match(Tokentype.EQUAL)) {
+//            Token equals = previous();
+//            Expr value = assignment();
+//            if (expr instanceof Expr.Variable) {
+//                Token name = ((Expr.Variable) expr).name;
+//                return new Expr.Assign(name, value);
+//            }
+//            error(equals, "Invalid assignment target.");
+//        }
+//        return expr;
+//    }this is assign method originally
         Expr initializer = null;
         if (match(Tokentype.EQUAL)) {
             initializer = Expression();
@@ -98,6 +113,13 @@ class Parser {
 
         // Return an instance of Stmt directly
         return new Stmt.Var(nameToken, initializer);//removed vartype here.check again the method
+    }
+    private Stmt whileStatement() {
+        consume(Tokentype.LEFT_PAREN, "Expect '(' after 'while'.");
+        Expr condition = Expression();
+        consume(Tokentype.RIGHT_PAREN, "Expect ')' after condition.");
+        Stmt body = statement();
+        return new Stmt.While(condition, body);
     }
     private Stmt expressionStatement() {
         Expr expr =   Expression();
@@ -113,7 +135,7 @@ class Parser {
         return statements;
     }
     private Expr assignment() {
-        Expr expr = equality();
+        Expr expr = or();
         if (match(Tokentype.EQUAL)) {
             Token equals = previous();
             Expr value = assignment();
@@ -125,6 +147,24 @@ class Parser {
         }
             return expr;
         }
+    private Expr or() {
+        Expr expr = and();
+        while (match(Tokentype.OR)) {
+            Token operator = previous();
+            Expr right = and();
+            expr = new Expr.Logical(expr, operator, right);
+        }
+        return expr;
+    }
+    private Expr and() {
+        Expr expr = equality();
+        while (match(Tokentype.AND)) {
+            Token operator = previous();
+            Expr right = equality();
+            expr = new Expr.Logical(expr, operator, right);
+        }
+        return expr;
+    }
 
     //    Expr parse() {
 //        try {
@@ -278,7 +318,7 @@ class Parser {
 
         if (match(Tokentype.LEFT_PAREN)) {
             Expr expressions = Expression();
-            consume(Tokentype.RIGHT_PAREN, "Expect ')' after expression");
+            consume(RIGHT_PAREN, "Expect ')' after expression");
             return new Expr.Grouping(expressions);
         }
         throw error(peek(), "Expect expression");
