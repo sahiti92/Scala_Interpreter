@@ -1,0 +1,4 @@
+val declaration-make immutable
+for (i: Int <- 5 to 1 by -1) {
+  println(i)
+}

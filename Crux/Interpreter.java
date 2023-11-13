@@ -67,7 +67,11 @@ import java.util.List;
             }
             case GREATER -> {
                 checkNumberOperands(expr.operator, left, right);
-                return (double) left > (double) right;
+                if (left instanceof Integer && right instanceof Integer) {
+                    return (int) left > (int) right;
+                }
+                return ((Number) left).doubleValue() > ((Number) right).doubleValue();
+//                return (double) left > (double) right;
             }
             case GREATER_EQUAL -> {
                 checkNumberOperands(expr.operator, left, right);
@@ -251,9 +255,20 @@ import java.util.List;
             value = evaluate(stmt.initializer);
         }
         environment.define(stmt.name.lexeme, value);
-        System.out.println(value.toString());
+//        System.out.println(value.toString());
         return null;
     }
+    @Override
+    public Void visitValStmt(Stmt.Val stmt) {
+        Object value = null;
+        if (stmt.initializer != null) {
+            value = evaluate(stmt.initializer);
+        }
+        environment.define(stmt.name.lexeme, value);
+//        System.out.println(value.toString());
+        return null;
+    }
+
     @Override
     public Void visitWhileStmt(Stmt.While stmt) {
         while (isTruth(evaluate(stmt.condition))) {

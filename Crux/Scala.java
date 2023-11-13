@@ -19,7 +19,7 @@ public class Scala {
             System.out.println("Usage : scala [script]");
             System.exit(64);
         } else if (args.length == 1) {
-            runFile(args[0]);
+            runFile("C:\\Users\\DHANANJAY V\\IdeaProjects\\Interpreter_Scala\\test1.txt");
         }
         else {
             runPrompt();
@@ -45,9 +45,9 @@ public class Scala {
     private static void run(String source){
        Lexer scanner = new Lexer(source);
        List<Token> tokens = scanner.scanTokens();
-        for(Token token : tokens){
-          System.out.println(token);
-      }
+//        for(Token token : tokens){
+//          System.out.println(token);
+//      }
         Parser parser = new Parser(tokens);
 //Expr expression = parser.parse();
      //  System.out.println(expression);

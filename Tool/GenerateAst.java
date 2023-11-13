@@ -32,7 +32,9 @@ defineAst(outputDir, "Stmt", Arrays.asList(
         "If : Expr condition, Stmt thenBranch," + " Stmt elseBranch",
         //        "Conditional : Expr condition, Expr thenBranch, Expr elseBranch"/earlier gpt
         "Print : Expr expression",
-        "Var : Token name, Expr initializer",//need to change..not so sure
+        "Var : Token name, Expr initializer",
+        //need to change..not so sure
+        "Val : Token name, Expr initializer",
         "While : Expr condition, Stmt body"
         ));
     }

@@ -27,6 +27,7 @@ class Parser {
     private Stmt declaration() {
         try {
             if (match(Tokentype.VAR)) return varDeclaration();
+            if(match(Tokentype.VAL))return valDeclaration();
             return statement();
         } catch (ParseError error) {
             synchronize();
@@ -35,7 +36,7 @@ class Parser {
     }
     private Stmt statement() {
         if (match(Tokentype.FOR)) return forStatement();
-      if (match(Tokentype.IF)) return ifStatement();
+        if (match(Tokentype.IF)) return ifStatement();
         if (match(Tokentype.PRINT)) return printStatement();
         if (match(Tokentype.WHILE)) return whileStatement();
         if (match(Tokentype.LEFT_BRACE)) return new Stmt.Block(block());
@@ -93,70 +94,116 @@ class Parser {
         consume(Tokentype.SEMICOLON, "Expect ';' after value.");
         return new Stmt.Print(value);
     }
-//private Stmt printStatement() {
-//    consume(Tokentype.LEFT_PAREN, "Expect '(' after 'print'");
-//    Stmt expression =  expressionStatement();
-//    consume(Tokentype.RIGHT_PAREN, "Expect ')' after expression");
-//    consume(Tokentype.SEMICOLON, "Expect ';' after print statement");
-//    return new PrintStmt(expression);
-//}
-
-//    private Stmt varDeclaration() {
-//        Token name = consume(Tokentype.IDENTIFIER, "Expect variable name.");
-//        Expr initializer = null;
-//        if (match(Tokentype.EQUAL)) {
-//            initializer = Expression();
-//        }
-//        consume(Tokentype.SEMICOLON, "Expect ';' after variable declaration.");
-//        return new Stmt.Var(name, initializer);
-//    }
-
-
 
 //delimiter as nextline shld be fig out
     private Stmt varDeclaration() {
         Token nameToken = consume(Tokentype.IDENTIFIER, "Expect variable name.");
         Optional<String> varType = Optional.empty();
+        Expr initializer = null;
 
-        if (match(Tokentype.COLON)) {
+   if (match(Tokentype.COLON)) {
+       if (match(Tokentype.COLON)) {
+           // Assuming Tokentype.COLON is used for specifying the type
+           if(match(Tokentype.INT,Tokentype.DOUBLE,Tokentype.FLOAT,Tokentype.STRING)){
+
+           }
+           else{
+               throw error(peek(), "Expect datatype");
+           }
+
+
+       }
             // Assuming Tokentype.COLON is used for specifying the type
-
-            Token datatype=getcurrent();
-            switch (datatype.type){
-                case INT:
-                    varType = Optional.of(consume(Tokentype.INT, "Expect variable type.").lexeme);break;
-                case DOUBLE:
-                    varType = Optional.of(consume(Tokentype.DOUBLE, "Expect variable type.").lexeme);break;
-                case FLOAT:
-                    varType = Optional.of(consume(Tokentype.FLOAT, "Expect variable type.").lexeme);break;
-                case STRING:
-                    varType = Optional.of(consume(Tokentype.STRING, "Expect variable type.").lexeme);break;
+//            Token datatype=getcurrent();
+//            switch (datatype.type){
+//                case INT:
+//                    varType = Optional.of(consume(Tokentype.INT, "Expect variable type.").lexeme);break;
+//                case DOUBLE:
+//                    varType = Optional.of(consume(Tokentype.DOUBLE, "Expect variable type.").lexeme);break;
+//                case FLOAT:
+//                    varType = Optional.of(consume(Tokentype.FLOAT, "Expect variable type.").lexeme);break;
+//                case STRING:
+//                    varType = Optional.of(consume(Tokentype.STRING, "Expect variable type.").lexeme);break;
+//            }
+            if (match(Tokentype.EQUAL)) {
+                initializer = Expression();
+            }
+            else {
+                throw error(peek(), "Expect '=' expression");
             }
             //varType = Optional.of(consume(Tokentype.INT, "Expect variable type.").lexeme);
         }
-
-//        Expr expr = equality();
-//        if (match(Tokentype.EQUAL)) {
-//            Token equals = previous();
-//            Expr value = assignment();
-//            if (expr instanceof Expr.Variable) {
-//                Token name = ((Expr.Variable) expr).name;
-//                return new Expr.Assign(name, value);
-//            }
-//            error(equals, "Invalid assignment target.");
-//        }
-//        return expr;
-//    }this is assign method originally
-        Expr initializer = null;
-        if (match(Tokentype.EQUAL)) {
+        else if (match(Tokentype.EQUAL)) {
             initializer = Expression();
         }
+        else {
+//            consume(Tokentype.SEMICOLON, "Expected but ';' found..");
+            throw error(peek(), "Expect '=' expression");
+//
+        }
+
 
         consume(Tokentype.SEMICOLON, "Expect ';' after variable declaration.");
 
         // Return an instance of Stmt directly
         return new Stmt.Var(nameToken, initializer);//removed vartype here.check again the method
     }
+
+    private Stmt valDeclaration() {
+        Token nameToken = consume(Tokentype.IDENTIFIER, "Expect variable name.");
+        Optional<String> varType = Optional.empty();
+        Expr initializer = null;
+
+        if (match(Tokentype.COLON)) {
+            if (match(Tokentype.COLON)) {
+                // Assuming Tokentype.COLON is used for specifying the type
+                if(match(Tokentype.INT,Tokentype.DOUBLE,Tokentype.FLOAT,Tokentype.STRING)){
+
+                }
+                else{
+                    throw error(peek(), "Expect datatype");
+                }
+
+
+            }
+            // Assuming Tokentype.COLON is used for specifying the type
+//            Token datatype=getcurrent();
+//            switch (datatype.type){
+//                case INT:
+//                    varType = Optional.of(consume(Tokentype.INT, "Expect variable type.").lexeme);break;
+//                case DOUBLE:
+//                    varType = Optional.of(consume(Tokentype.DOUBLE, "Expect variable type.").lexeme);break;
+//                case FLOAT:
+//                    varType = Optional.of(consume(Tokentype.FLOAT, "Expect variable type.").lexeme);break;
+//                case STRING:
+//                    varType = Optional.of(consume(Tokentype.STRING, "Expect variable type.").lexeme);break;
+//            }
+            if (match(Tokentype.EQUAL)) {
+                initializer = Expression();
+            }
+            else {
+                throw error(peek(), "Expect '=' expression");
+            }
+            //varType = Optional.of(consume(Tokentype.INT, "Expect variable type.").lexeme);
+        }
+        else if (match(Tokentype.EQUAL)) {
+            initializer = Expression();
+        }
+        else {
+//            consume(Tokentype.SEMICOLON, "Expected but ';' found..");
+            throw error(peek(), "Expect '=' expression");
+//
+        }
+
+
+        consume(Tokentype.SEMICOLON, "Expect ';' after variable declaration.");
+
+        // Return an instance of Stmt directly
+        return new Stmt.Var(nameToken, initializer);//removed vartype here.check again the method
+    }
+
+
+
     private Stmt whileStatement() {
         consume(Tokentype.LEFT_PAREN, "Expect '(' after 'while'.");
         Expr condition = Expression();
@@ -355,6 +402,7 @@ class Parser {
         if (match(Tokentype.DOUBLE, Tokentype.STRING,Tokentype.INT)) {
             return new Expr.Literal(previous().literal);}
         if (match(Tokentype.IDENTIFIER)) {
+//            System.out.println("Entered");
             return new Expr.Variable(previous());
         }
 

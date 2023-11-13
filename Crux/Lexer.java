@@ -37,7 +37,8 @@ class Lexer {
             case '.':addToken(Tokentype.DOT);break;
             case '-':addToken(Tokentype.MINUS);break;
             case '+':addToken(Tokentype.PLUS);break;
-            case '\n':addToken(Tokentype.NEXTLINE);
+            case '\n':
+//                addToken(Tokentype.NEXTLINE);
                 line++;
                 break;
 
