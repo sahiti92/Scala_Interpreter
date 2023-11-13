@@ -87,10 +87,20 @@ class Parser {
        }return new Stmt.If(condition, thenBranch, elseBranch);
    }
     private Stmt printStatement() {
+        consume(Tokentype.LEFT_PAREN, "Expect '(' after 'println'");
         Expr value = Expression();
+        consume(Tokentype.RIGHT_PAREN, "Expect ')' after expression");
         consume(Tokentype.SEMICOLON, "Expect ';' after value.");
         return new Stmt.Print(value);
     }
+//private Stmt printStatement() {
+//    consume(Tokentype.LEFT_PAREN, "Expect '(' after 'print'");
+//    Stmt expression =  expressionStatement();
+//    consume(Tokentype.RIGHT_PAREN, "Expect ')' after expression");
+//    consume(Tokentype.SEMICOLON, "Expect ';' after print statement");
+//    return new PrintStmt(expression);
+//}
+
 //    private Stmt varDeclaration() {
 //        Token name = consume(Tokentype.IDENTIFIER, "Expect variable name.");
 //        Expr initializer = null;
@@ -342,7 +352,7 @@ class Parser {
         if (match(Tokentype.FALSE)) return new Expr.Literal(false);
         if (match(Tokentype.TRUE)) return new Expr.Literal(true);
         if (match(Tokentype.NIL)) return new Expr.Literal(null);
-        if (match(Tokentype.DOUBLE, Tokentype.IDENTIFIER,Tokentype.INT)) {
+        if (match(Tokentype.DOUBLE, Tokentype.STRING,Tokentype.INT)) {
             return new Expr.Literal(previous().literal);}
         if (match(Tokentype.IDENTIFIER)) {
             return new Expr.Variable(previous());
