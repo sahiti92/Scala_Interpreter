@@ -34,25 +34,58 @@ class Parser {
         }
     }
     private Stmt statement() {
-
-//        if (match(Tokentype.IF)) return ifStatement();
+        if (match(Tokentype.FOR)) return forStatement();
+      if (match(Tokentype.IF)) return ifStatement();
         if (match(Tokentype.PRINT)) return printStatement();
         if (match(Tokentype.WHILE)) return whileStatement();
         if (match(Tokentype.LEFT_BRACE)) return new Stmt.Block(block());
         return expressionStatement();
     }
+    private Stmt forStatement() {
+        consume(Tokentype.LEFT_PAREN, "Expect '(' after 'for'.");
+        Stmt initializer;
+        if (match(Tokentype.SEMICOLON)) {
+            initializer = null;
+        } else if (match(VAR)) {
+            initializer = varDeclaration();
+        } else {
+            initializer = expressionStatement();
+        }
+        Expr condition = null;
+        if (!check(Tokentype.SEMICOLON)) {
+            condition = Expression();
+        }
+        consume(Tokentype.SEMICOLON, "Expect ';' after loop condition.");
+        Expr increment = null;
+        if (!check(RIGHT_PAREN)) {
+            increment = Expression();
+        }
+        consume(RIGHT_PAREN, "Expect ')' after for clauses.");
+        Stmt body = statement();
+        if (increment != null) {
+            body = new Stmt.Block(
+                    Arrays.asList(
+                            body,
+                            new Stmt.Expression(increment)));
+        }
+        if (condition == null) condition = new Expr.Literal(true);
+        body = new Stmt.While(condition, body);
+        if (initializer != null) {
+            body = new Stmt.Block(Arrays.asList(initializer, body));
+        }
+        return body;
+    }
 
-//    private Stmt ifStatement() {
-//        consume(Tokentype.LEFT_PAREN, "Expect '(' after 'if'.");
-//        Expr condition = Expression();
-//        consume(Tokentype.RIGHT_PAREN, "Expect ')' after if condition.");
-//        Stmt thenBranch = statement();
-//        Stmt elseBranch = null;
-//        if (match(Tokentype.ELSE)) {
-//            elseBranch = statement();
-//        }
-//        return new Stmt.If(condition, thenBranch, elseBranch);
-//    }
+   private Stmt ifStatement() {
+       consume(Tokentype.LEFT_PAREN, "Expect '(' after 'if'.");
+      Expr condition = Expression();
+       consume(Tokentype.RIGHT_PAREN, "Expect ')' after if condition.");
+       Stmt thenBranch = statement();
+       Stmt elseBranch = null;
+        if (match(Tokentype.ELSE)) {
+           elseBranch = statement();
+       }return new Stmt.If(condition, thenBranch, elseBranch);
+   }
     private Stmt printStatement() {
         Expr value = Expression();
         consume(Tokentype.SEMICOLON, "Expect ';' after value.");
