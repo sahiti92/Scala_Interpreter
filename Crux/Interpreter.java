@@ -65,21 +65,37 @@ import java.util.List;
             case EQUAL_EQUAL -> {
                 return isEqual(left, right);
             }
-            case GREATER -> {
-                checkNumberOperands(expr.operator, left, right);
-                return (double) left > (double) right;
+           case GREATER -> {
+//                checkNumberOperands(expr.operator, left, right);
+//                return (double) left > (double) right;
+                if (left instanceof Integer && right instanceof Integer) {
+                    return (int) left > (int) right;
+                }
+                return ((Number) left).doubleValue() > ((Number) right).doubleValue();
             }
             case GREATER_EQUAL -> {
-                checkNumberOperands(expr.operator, left, right);
-                return (double) left >= (double) right;
+//                checkNumberOperands(expr.operator, left, right);
+//                return (double) left >= (double) right;
+                if (left instanceof Integer && right instanceof Integer) {
+                    return (int) left >= (int) right;
+                }
+                return ((Number) left).doubleValue() >= ((Number) right).doubleValue();
             }
             case LESS -> {
-                checkNumberOperands(expr.operator, left, right);
-                return (double) left < (double) right;
+//                checkNumberOperands(expr.operator, left, right);
+//                return (double) left < (double) right;
+                if (left instanceof Integer && right instanceof Integer) {
+                    return (int) left < (int) right;
+                }
+                return ((Number) left).doubleValue() <= ((Number) right).doubleValue();
             }
             case LESS_EQUAL -> {
-                checkNumberOperands(expr.operator, left, right);
-                return (double) left <= (double) right;
+//                checkNumberOperands(expr.operator, left, right);
+//                return (double) left <= (double) right;
+                if (left instanceof Integer && right instanceof Integer) {
+                    return (int) left <= (int) right;
+                }
+                return ((Number) left).doubleValue() <=((Number) right).doubleValue();
             }
         }
         return null;
