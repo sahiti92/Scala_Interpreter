@@ -154,18 +154,19 @@ class Parser {
         Optional<String> varType = Optional.empty();
         Expr initializer = null;
 
+
         if (match(Tokentype.COLON)) {
-            if (match(Tokentype.COLON)) {
-                // Assuming Tokentype.COLON is used for specifying the type
-                if(match(Tokentype.INT,Tokentype.DOUBLE,Tokentype.FLOAT,Tokentype.STRING)){
-
-                }
-                else{
-                    throw error(peek(), "Expect datatype");
-                }
-
+            // Assuming Tokentype.COLON is used for specifying the type
+            if (match(Tokentype.INT, Tokentype.DOUBLE, Tokentype.FLOAT, Tokentype.STRING)) {
 
             }
+            else {
+                throw error(peek(), "Expect datatype");
+            }
+
+
+
+
             // Assuming Tokentype.COLON is used for specifying the type
 //            Token datatype=getcurrent();
 //            switch (datatype.type){
@@ -184,8 +185,9 @@ class Parser {
             else {
                 throw error(peek(), "Expect '=' expression");
             }
-            //varType = Optional.of(consume(Tokentype.INT, "Expect variable type.").lexeme);
         }
+            //varType = Optional.of(consume(Tokentype.INT, "Expect variable type.").lexeme);
+
         else if (match(Tokentype.EQUAL)) {
             initializer = Expression();
         }
