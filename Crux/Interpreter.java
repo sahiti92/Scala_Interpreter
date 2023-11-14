@@ -66,53 +66,41 @@ import java.util.List;
                 return isEqual(left, right);
             }
             case GREATER -> {
-                checkNumberOperands(expr.operator, left, right);
+//                checkNumberOperands(expr.operator, left, right);
+//                return (double) left > (double) right;
                 if (left instanceof Integer && right instanceof Integer) {
                     return (int) left > (int) right;
                 }
                 return ((Number) left).doubleValue() > ((Number) right).doubleValue();
-//                return (double) left > (double) right;
             }
             case GREATER_EQUAL -> {
-                checkNumberOperands(expr.operator, left, right);
-                return (double) left >= (double) right;
+//                checkNumberOperands(expr.operator, left, right);
+//                return (double) left >= (double) right;
+                if (left instanceof Integer && right instanceof Integer) {
+                    return (int) left >= (int) right;
+                }
+                return ((Number) left).doubleValue() >= ((Number) right).doubleValue();
             }
             case LESS -> {
-                checkNumberOperands(expr.operator, left, right);
-                return (double) left < (double) right;
+//                checkNumberOperands(expr.operator, left, right);
+//                return (double) left < (double) right;
+                if (left instanceof Integer && right instanceof Integer) {
+                    return (int) left < (int) right;
+                }
+                return ((Number) left).doubleValue() <= ((Number) right).doubleValue();
             }
             case LESS_EQUAL -> {
-                checkNumberOperands(expr.operator, left, right);
-                return (double) left <= (double) right;
-            }
+//                checkNumberOperands(expr.operator, left, right);
+//                return (double) left <= (double) right;
+                if (left instanceof Integer && right instanceof Integer) {
+                    return (int) left <= (int) right;
+                }
+                return ((Number) left).doubleValue() <=((Number) right).doubleValue();}
         }
         return null;
     }
 
-//    private void checkNumberOperands(Token operator, Object left, Object right) {
 
-    //        if(left instanceof Double && right instanceof Double)
-//        {
-////            a=(double) left;
-////            b=(double)right;
-//            return;
-//        }
-//        if(left instanceof Integer && right instanceof Double){
-////            a=(int) left;
-////        b=(double)right;
-//            return;}
-//        if(left instanceof Double && right instanceof Integer) {
-////            a=(double) left;
-////            b=(int)right;
-//            return;
-//        }
-//        if(left instanceof Integer && right instanceof Integer) {
-//            //a=(int) left;
-//            //b=(int)right;
-//            return;
-//        }
-//        throw new RuntimeError(operator,"Both Operands must be numbers");
-//    }
     private void checkNumberOperands(Token operator, Object left, Object right) {
         if ((left instanceof Number || left instanceof Character) && (right instanceof Number || right instanceof Character)) {
             return;
@@ -255,9 +243,9 @@ import java.util.List;
             value = evaluate(stmt.initializer);
         }
         environment.define(stmt.name.lexeme, value);
-//        System.out.println(value.toString());
+    //        System.out.println(value.toString());
         return null;
-    }
+}
     @Override
     public Void visitValStmt(Stmt.Val stmt) {
         Object value = null;
@@ -268,7 +256,6 @@ import java.util.List;
 //        System.out.println(value.toString());
         return null;
     }
-
     @Override
     public Void visitWhileStmt(Stmt.While stmt) {
         while (isTruth(evaluate(stmt.condition))) {
