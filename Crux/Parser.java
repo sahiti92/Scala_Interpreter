@@ -13,6 +13,7 @@ import static Crux.Tokentype.*;
 class Parser {
     private static class ParseError extends RuntimeException {};
     private final List<Token> tokens;
+    ArrayList<String> valValues=new ArrayList<>();
     private int current = 0;
 
     Parser(List<Token> tokens) {
@@ -181,6 +182,7 @@ class Parser {
         Token nameToken = consume(Tokentype.IDENTIFIER, "Expect variable name.");
         Optional<String> varType = Optional.empty();
         Expr initializer = null;
+           valValues.add(nameToken.lexeme);
 
 
         if (match(Tokentype.COLON)) {
@@ -261,6 +263,11 @@ class Parser {
             Expr value = assignment();
             if (expr instanceof Expr.Variable) {
                 Token name = ((Expr.Variable) expr).name;
+                  for(String t:valValues){
+                    if(t.equals(name.lexeme)){
+                     throw  error(name, " reassignment to val not possible");
+                    }
+                }
                 return new Expr.Assign(name, value);
             }
             error(equals, "Invalid assignment target.");
