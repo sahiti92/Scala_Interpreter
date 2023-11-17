@@ -22,7 +22,7 @@ public class Environment {
     public Environment(Environment enclosing) {
         this.enclosing = enclosing;
     }
-    void assign(Token name, Object value) {
+     void assign(Token name, Object value) {
         if (values.containsKey(name.lexeme)) {
             values.put(name.lexeme, value);
             return;

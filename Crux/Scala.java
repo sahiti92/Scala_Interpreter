@@ -45,9 +45,9 @@ public class Scala {
     private static void run(String source){
        Lexer scanner = new Lexer(source);
        List<Token> tokens = scanner.scanTokens();
-//        for(Token token : tokens){
-//          System.out.println(token);
-//      }
+//       for(Token token : tokens){
+//         System.out.println(token);
+//    }
         Parser parser = new Parser(tokens);
 //Expr expression = parser.parse();
      //  System.out.println(expression);

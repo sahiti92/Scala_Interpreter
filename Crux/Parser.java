@@ -5,8 +5,7 @@ import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Optional;
 
-import static Crux.Tokentype.RIGHT_PAREN;
-import static Crux.Tokentype.VAR;
+import static Crux.Tokentype.*;
 // You should remove this line because the package name should match the folder structure.
 // package Interpreter_Scala.Crux;
 
@@ -42,39 +41,68 @@ class Parser {
         if (match(Tokentype.LEFT_BRACE)) return new Stmt.Block(block());
         return expressionStatement();
     }
+    private Stmt generator(Token nameToken)
+    {
+
+       consume(Tokentype.GENERATOR, "Expect <-");
+       Expr initializer= new Expr.Literal(consume(Tokentype.INT,"Expect initial value"));
+        return new Stmt.Var(nameToken, initializer);
+
+    }
+//    for (i <- 1 to 5) {
+//        println(i)
+//    }
+//
+//
+//    Desugared while loop:
+//    scala
+//    var i = 1
+//while (i <= 5) {
+//        println(i)
+//        i += 1
+//    }
+
+
     private Stmt forStatement() {
         consume(Tokentype.LEFT_PAREN, "Expect '(' after 'for'.");
-        Stmt initializer;
-        if (match(Tokentype.SEMICOLON)) {
-            initializer = null;
-        } else if (match(VAR)) {
-            initializer = varDeclaration();
-        } else {
-            initializer = expressionStatement();
-        }
-        Expr condition = null;
-        if (!check(Tokentype.SEMICOLON)) {
-            condition = Expression();
-        }
-        consume(Tokentype.SEMICOLON, "Expect ';' after loop condition.");
-        Expr increment = null;
-        if (!check(RIGHT_PAREN)) {
-            increment = Expression();
-        }
+        Token nameToken = consume(Tokentype.IDENTIFIER, "Expect variable name.");
+        Stmt initializer=generator(nameToken);
+//        if (match(Tokentype.SEMICOLON)) {
+//        } else if (match(VAR)) {
+//            initializer = varDeclaration();
+//        } else {
+//            initializer = expressionStatement();
+//        }
+        consume(Tokentype.TO,"Expect to");
+        Expr initr= new Expr.Variable(nameToken);
+        Token plus=advance();
+        Token operator=advance();
+         Expr finalr= new Expr.Literal(consume(Tokentype.INT,"Expect final value"));
+
+        Expr condition =new Expr.Logical(initr,operator,finalr);//maybe wrong as expression operator expression
         consume(RIGHT_PAREN, "Expect ')' after for clauses.");
+//        if (!check(Tokentype.SEMICOLON)) {
+//            condition = Expression();
+//        }
+//        consume(Tokentype.SEMICOLON, "Expect ';' after loop condition.");
+        Expr value= new Expr.Binary(initr,plus, new Expr.Literal(1));
+        //System.out.println(value.);
+
+      Expr increment = new Expr.Assign(nameToken,value);
+//        if (!check(RIGHT_PAREN)) {
+//           increment = Expression();
+//        }
+//        consume(RIGHT_PAREN, "Expect ')' after for clauses.");
         Stmt body = statement();
-        if (increment != null) {
+
             body = new Stmt.Block(
-                    Arrays.asList(
-                            body,
+                   Arrays.asList(
+                          body,
                             new Stmt.Expression(increment)));
-        }
-        if (condition == null) condition = new Expr.Literal(true);
         body = new Stmt.While(condition, body);
-        if (initializer != null) {
-            body = new Stmt.Block(Arrays.asList(initializer, body));
-        }
+      body = new Stmt.Block(Arrays.asList(initializer, body));
         return body;
+//    }
     }
 
    private Stmt ifStatement() {
@@ -91,7 +119,7 @@ class Parser {
         consume(Tokentype.LEFT_PAREN, "Expect '(' after 'println'");
         Expr value = Expression();
         consume(Tokentype.RIGHT_PAREN, "Expect ')' after expression");
-        consume(Tokentype.SEMICOLON, "Expect ';' after value.");
+        consume(Tokentype.SEMICOLON, "Expect ';' after print statement.");
         return new Stmt.Print(value);
     }
 
@@ -335,25 +363,26 @@ class Parser {
         advance();
         while (!isAtEnd()) {
             if (previous().type == Tokentype.NEXTLINE) return;
-        }
-        switch (peek().type) {
 
-            case IF:
-            case ELSE:
-            case FOR:
-            case CLASS:
-            case WHILE:
-            case RETURN:
-            case VAR:
-            case PRINT:
-            case AND:
-            case OR:
-            case TRAIT:
-            case VAL:
-            case CASE:
-                return;
+            switch (peek().type) {
+
+                case IF:
+                case ELSE:
+                case FOR:
+                case CLASS:
+                case WHILE:
+                case RETURN:
+                case VAR:
+                case PRINT:
+                case AND:
+                case OR:
+                case TRAIT:
+                case VAL:
+                case CASE:
+                    return;
+            }
+            advance();
         }
-        advance();
     }
 //}
 

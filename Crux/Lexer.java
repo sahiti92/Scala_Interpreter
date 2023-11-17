@@ -37,6 +37,7 @@ class Lexer {
             case '.':addToken(Tokentype.DOT);break;
             case '-':addToken(Tokentype.MINUS);break;
             case '+':addToken(Tokentype.PLUS);break;
+
             case '\n':
 //                addToken(Tokentype.NEXTLINE);
                 line++;
@@ -93,6 +94,13 @@ class Lexer {
         Tokentype type = keywords.get(text);
         if (type == null) type = Tokentype.IDENTIFIER;
         addToken(type);
+        if(type==Tokentype.TO)
+        {
+            addToken(Tokentype.PLUS);
+            addToken(Tokentype.LESS_EQUAL);
+        }
+
+
 
     }
     private boolean isAlpha(char c) {
@@ -168,6 +176,8 @@ class Lexer {
         keywords.put("else", Tokentype.ELSE);
         keywords.put("false", Tokentype.FALSE);
         keywords.put("for", Tokentype.FOR);
+        keywords.put("to", Tokentype.TO);
+        keywords.put("by", Tokentype.BY);
    //  keywords.put("fun", FUN);
         keywords.put("if", Tokentype.IF);
         keywords.put("nil", Tokentype.NIL);

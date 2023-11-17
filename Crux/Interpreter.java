@@ -9,8 +9,11 @@ import java.util.List;
     public Object visitBinaryExpr(Expr.Binary expr) {
 
 
+
         Object right = evaluate(expr.right);
         Object left = evaluate(expr.left);
+        System.out.println(left.getClass());
+        System.out.println(right.getClass());
         switch (expr.operator.type) {
             case MINUS -> {
                 checkNumberOperands(expr.operator, left, right);
@@ -39,6 +42,7 @@ import java.util.List;
                 return ((Number) left).doubleValue() / ((Number) right).doubleValue();
             }
             case PLUS -> {//when 2 var passed
+
 
                 if (left instanceof Double && right instanceof Double) {
                     return (double) left + (double) right;
@@ -258,6 +262,7 @@ import java.util.List;
     }
     @Override
     public Void visitWhileStmt(Stmt.While stmt) {
+      //  System.out.println(isTruth(evaluate(stmt.condition)));
         while (isTruth(evaluate(stmt.condition))) {
             execute(stmt.body);
         }
@@ -271,6 +276,7 @@ import java.util.List;
     }
     @Override
     public Object visitVariableExpr(Expr.Variable expr) {
+//        System.out.println(environment.get(expr.name));
         return environment.get(expr.name);
     }
     //    void interpret(Expr expression){
