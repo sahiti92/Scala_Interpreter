@@ -1,7 +1,3 @@
-
-val a=2;
-a=5;
-println(a);
-
-//if x == 1 then println(x) write for this.
-
+var s1:String="Hello";
+var s2:String="World";
+println("s1:"+s1);

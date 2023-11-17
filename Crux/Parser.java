@@ -22,18 +22,20 @@ class Parser {
 
     private Expr Expression() {
         //return equality();
-       return assignment();
+        return assignment();
     }
+
     private Stmt declaration() {
         try {
             if (match(Tokentype.VAR)) return varDeclaration();
-            if(match(Tokentype.VAL))return valDeclaration();
+            if (match(Tokentype.VAL)) return valDeclaration();
             return statement();
         } catch (ParseError error) {
             synchronize();
             return null;
         }
     }
+
     private Stmt statement() {
         if (match(Tokentype.FOR)) return forStatement();
         if (match(Tokentype.IF)) return ifStatement();
@@ -42,11 +44,11 @@ class Parser {
         if (match(Tokentype.LEFT_BRACE)) return new Stmt.Block(block());
         return expressionStatement();
     }
-    private Stmt generator(Token nameToken)
-    {
 
-       consume(Tokentype.GENERATOR, "Expect <-");
-       Expr initializer= new Expr.Literal(consume(Tokentype.INT,"Expect initial value"));
+    private Stmt generator(Token nameToken) {
+
+        consume(Tokentype.GENERATOR, "Expect <-");
+        Expr initializer = new Expr.Literal(consume(Tokentype.INT, "Expect initial value"));
         return new Stmt.Var(nameToken, initializer);
 
     }
@@ -67,55 +69,57 @@ class Parser {
     private Stmt forStatement() {
         consume(Tokentype.LEFT_PAREN, "Expect '(' after 'for'.");
         Token nameToken = consume(Tokentype.IDENTIFIER, "Expect variable name.");
-        Stmt initializer=generator(nameToken);
+        Stmt initializer = generator(nameToken);
 //        if (match(Tokentype.SEMICOLON)) {
 //        } else if (match(VAR)) {
 //            initializer = varDeclaration();
 //        } else {
 //            initializer = expressionStatement();
 //        }
-        consume(Tokentype.TO,"Expect to");
-        Expr initr= new Expr.Variable(nameToken);
-        Token plus=advance();
-        Token operator=advance();
-         Expr finalr= new Expr.Literal(consume(Tokentype.INT,"Expect final value"));
+        consume(Tokentype.TO, "Expect to");
+        Expr initr = new Expr.Variable(nameToken);
+        Token plus = advance();
+        Token operator = advance();
+        Expr finalr = new Expr.Literal(consume(Tokentype.INT, "Expect final value"));
 
-        Expr condition =new Expr.Logical(initr,operator,finalr);//maybe wrong as expression operator expression
+        Expr condition = new Expr.Logical(initr, operator, finalr);//maybe wrong as expression operator expression
         consume(RIGHT_PAREN, "Expect ')' after for clauses.");
 //        if (!check(Tokentype.SEMICOLON)) {
 //            condition = Expression();
 //        }
 //        consume(Tokentype.SEMICOLON, "Expect ';' after loop condition.");
-        Expr value= new Expr.Binary(initr,plus, new Expr.Literal(1));
+        Expr value = new Expr.Binary(initr, plus, new Expr.Literal(1));
         //System.out.println(value.);
 
-      Expr increment = new Expr.Assign(nameToken,value);
+        Expr increment = new Expr.Assign(nameToken, value);
 //        if (!check(RIGHT_PAREN)) {
 //           increment = Expression();
 //        }
 //        consume(RIGHT_PAREN, "Expect ')' after for clauses.");
         Stmt body = statement();
 
-            body = new Stmt.Block(
-                   Arrays.asList(
-                          body,
-                            new Stmt.Expression(increment)));
+        body = new Stmt.Block(
+                Arrays.asList(
+                        body,
+                        new Stmt.Expression(increment)));
         body = new Stmt.While(condition, body);
-      body = new Stmt.Block(Arrays.asList(initializer, body));
+        body = new Stmt.Block(Arrays.asList(initializer, body));
         return body;
 //    }
     }
 
-   private Stmt ifStatement() {
-       consume(Tokentype.LEFT_PAREN, "Expect '(' after 'if'.");
-      Expr condition = Expression();
-       consume(Tokentype.RIGHT_PAREN, "Expect ')' after if condition.");
-       Stmt thenBranch = statement();
-       Stmt elseBranch = null;
+    private Stmt ifStatement() {
+        consume(Tokentype.LEFT_PAREN, "Expect '(' after 'if'.");
+        Expr condition = Expression();
+        consume(Tokentype.RIGHT_PAREN, "Expect ')' after if condition.");
+        Stmt thenBranch = statement();
+        Stmt elseBranch = null;
         if (match(Tokentype.ELSE)) {
-           elseBranch = statement();
-       }return new Stmt.If(condition, thenBranch, elseBranch);
-   }
+            elseBranch = statement();
+        }
+        return new Stmt.If(condition, thenBranch, elseBranch);
+    }
+
     private Stmt printStatement() {
         consume(Tokentype.LEFT_PAREN, "Expect '(' after 'println'");
         Expr value = Expression();
@@ -124,24 +128,21 @@ class Parser {
         return new Stmt.Print(value);
     }
 
-//delimiter as nextline shld be fig out
+    //delimiter as nextline shld be fig out
     private Stmt varDeclaration() {
         Token nameToken = consume(Tokentype.IDENTIFIER, "Expect variable name.");
-        Optional<String> varType = Optional.empty();
+//        Optional<String> varType = Optional.empty();
         Expr initializer = null;
 
-   if (match(Tokentype.COLON)) {
-       if (match(Tokentype.COLON)) {
-           // Assuming Tokentype.COLON is used for specifying the type
-           if(match(Tokentype.INT,Tokentype.DOUBLE,Tokentype.FLOAT,Tokentype.STRING)){
+        if (match(Tokentype.COLON)) {
+            // Assuming Tokentype.COLON is used for specifying the type
+            if (match(Tokentype.INT, Tokentype.DOUBLE, Tokentype.FLOAT, Tokentype.STRING)) {
 
-           }
-           else{
-               throw error(peek(), "Expect datatype");
-           }
+            } else {
+                throw error(peek(), "Expect datatype");
+            }
 
 
-       }
             // Assuming Tokentype.COLON is used for specifying the type
 //            Token datatype=getcurrent();
 //            switch (datatype.type){
@@ -156,8 +157,7 @@ class Parser {
 //            }
             if (match(Tokentype.EQUAL)) {
                 initializer = Expression();
-            }
-            else {
+            } else {
                 throw error(peek(), "Expect '=' expression");
             }
             //varType = Optional.of(consume(Tokentype.INT, "Expect variable type.").lexeme);
@@ -177,6 +177,8 @@ class Parser {
         // Return an instance of Stmt directly
         return new Stmt.Var(nameToken, initializer);//removed vartype here.check again the method
     }
+
+
 
     private Stmt valDeclaration() {
         Token nameToken = consume(Tokentype.IDENTIFIER, "Expect variable name.");
