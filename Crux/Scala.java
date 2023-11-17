@@ -19,7 +19,7 @@ public class Scala {
             System.out.println("Usage : scala [script]");
             System.exit(64);
         } else if (args.length == 1) {
-            runFile("C:\\Users\\DHANANJAY V\\IdeaProjects\\Interpreter_Scala\\test1.txt");
+            runFile("C:\\Users\\DHANANJAY V\\IdeaProjects\\Interpreter_Scala\\test2.txt");
         }
         else {
             runPrompt();

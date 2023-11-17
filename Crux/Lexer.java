@@ -60,7 +60,7 @@ class Lexer {
                 break;
             case '<':
                 if(match('=')){addToken(Tokentype.LESS_EQUAL);}
-                if(match('-')){addToken(Tokentype.GENERATOR);}
+                else if(match('-')){addToken(Tokentype.GENERATOR);}
                 else {addToken(Tokentype.LESS);}
 
                 break;

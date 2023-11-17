@@ -12,8 +12,6 @@ import java.util.List;
 
         Object right = evaluate(expr.right);
         Object left = evaluate(expr.left);
-        System.out.println(left.getClass());
-        System.out.println(right.getClass());
         switch (expr.operator.type) {
             case MINUS -> {
                 checkNumberOperands(expr.operator, left, right);
@@ -24,6 +22,9 @@ import java.util.List;
             }
             // case PLUS: return (double) left + (double) right;
             case STAR -> {
+                System.out.println("LEFT IS"+left.getClass());
+                System.out.println(right.getClass());
+
                 checkNumberOperands(expr.operator, left, right);
                 if (left instanceof Integer && right instanceof Integer) {
                     return (int) left * (int) right;
@@ -99,6 +100,8 @@ import java.util.List;
                 if (left instanceof Integer && right instanceof Integer) {
                     return (int) left <= (int) right;
                 }
+//                boolean a=(Boolean)(((Number) left).doubleValue() <=((Number) right).doubleValue());
+//                System.out.println(a);
                 return ((Number) left).doubleValue() <=((Number) right).doubleValue();}
         }
         return null;
@@ -237,6 +240,7 @@ import java.util.List;
     @Override
     public Void visitPrintStmt(Stmt.Print stmt) {
         Object value = evaluate(stmt.expression);
+        //System.out.println("Evaluated expression is:"+value);
         System.out.println(stringify(value));
         return null;
     }
@@ -244,10 +248,10 @@ import java.util.List;
     public Void visitVarStmt(Stmt.Var stmt) {
         Object value = null;
         if (stmt.initializer != null) {
+            //System.out.println("Object is"+stmt.initializer.getClass());
             value = evaluate(stmt.initializer);
         }
         environment.define(stmt.name.lexeme, value);
-    //        System.out.println(value.toString());
         return null;
 }
     @Override

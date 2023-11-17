@@ -1,0 +1,7 @@
+var a=5;
+a=a+1;
+println(a);
+for(i<-3 to 6 by 2)
+{
+println(i);
+}

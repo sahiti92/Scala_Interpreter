@@ -4,12 +4,9 @@ import java.util.List;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Optional;
-
 import static Crux.Tokentype.*;
 // You should remove this line because the package name should match the folder structure.
 // package Interpreter_Scala.Crux;
-
-
 class Parser {
     private static class ParseError extends RuntimeException {};
     private final List<Token> tokens;
@@ -48,7 +45,8 @@ class Parser {
     private Stmt generator(Token nameToken) {
 
         consume(Tokentype.GENERATOR, "Expect <-");
-        Expr initializer = new Expr.Literal(consume(Tokentype.INT, "Expect initial value"));
+        Expr initializer = new Expr.Literal(Integer.parseInt(consume(INT, "Expect initial value").lexeme));
+//        System.out.println(Integer.parseInt(consume(INT, "Expect final value").lexeme));
         return new Stmt.Var(nameToken, initializer);
 
     }
@@ -68,6 +66,7 @@ class Parser {
 
     private Stmt forStatement() {
         consume(Tokentype.LEFT_PAREN, "Expect '(' after 'for'.");
+
         Token nameToken = consume(Tokentype.IDENTIFIER, "Expect variable name.");
         Stmt initializer = generator(nameToken);
 //        if (match(Tokentype.SEMICOLON)) {
@@ -80,15 +79,16 @@ class Parser {
         Expr initr = new Expr.Variable(nameToken);
         Token plus = advance();
         Token operator = advance();
-        Expr finalr = new Expr.Literal(consume(Tokentype.INT, "Expect final value"));
-
-        Expr condition = new Expr.Logical(initr, operator, finalr);//maybe wrong as expression operator expression
+        Expr finalr =new Expr.Literal(Integer.parseInt(consume(INT, "Expect final value").lexeme));
+        Expr condition = new Expr.Binary(initr, operator, finalr);//maybe wrong as expression operator expression
+        int a=1;
+        if(match(Tokentype.BY))
+        {
+            a=Integer.parseInt(consume(INT,"Expect number for increment").lexeme);
+        }
         consume(RIGHT_PAREN, "Expect ')' after for clauses.");
-//        if (!check(Tokentype.SEMICOLON)) {
-//            condition = Expression();
-//        }
-//        consume(Tokentype.SEMICOLON, "Expect ';' after loop condition.");
-        Expr value = new Expr.Binary(initr, plus, new Expr.Literal(1));
+
+        Expr value = new Expr.Binary(initr, plus, new Expr.Literal(a));
         //System.out.println(value.);
 
         Expr increment = new Expr.Assign(nameToken, value);

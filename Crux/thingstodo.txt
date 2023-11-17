@@ -3,3 +3,6 @@
   //println(i)
 //}
 //if x == 1 then println(x)
+//error if token traversed and nit foundz
+Operands must be two numbers or two strings.
+[line 15]  println("SUM of INT,INT: "+(a+b));
